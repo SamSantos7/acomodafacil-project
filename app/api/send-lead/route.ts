@@ -1,6 +1,8 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { sendLeadNotification, sendLeadConfirmation } from '@/lib/resend'
+import { sendLeadWhatsAppNotification } from '@/lib/whatsapp'
 
 export async function POST(request: Request) {
   try {
@@ -16,17 +18,27 @@ export async function POST(request: Request) {
     }
 
     // Inserir no Supabase
-    const { error } = await supabase.from('leads_acomodacoes').insert([
-      {
-        ...body,
-        data_envio: new Date().toISOString(),
-      },
-    ])
+    const { data: lead, error } = await supabase
+      .from('leads_acomodacoes')
+      .insert([
+        {
+          ...body,
+          data_envio: new Date().toISOString(),
+        },
+      ])
+      .select()
+      .single()
 
     if (error) throw error
 
-    // TODO: Enviar e-mail automático
-    // TODO: Preparar webhook para WhatsApp
+    // Enviar e-mail para o admin
+    await sendLeadNotification(body)
+
+    // Enviar e-mail de confirmação para o lead
+    await sendLeadConfirmation(body)
+
+    // Enviar mensagem WhatsApp
+    await sendLeadWhatsAppNotification(body)
 
     return NextResponse.json(
       {
