@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -41,114 +41,61 @@ import {
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
+import { supabase } from "@/lib/supabase"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
-export default function AdminDashboard() {
+interface Lead {
+  id: number
+  nome: string
+  email: string
+  whatsapp: string
+  cidade: string
+  tipo_acomodacao: string
+  data_chegada: string
+  duracao: string
+  data_envio: string
+}
+
+export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("leads")
   const [showAddPartnerDialog, setShowAddPartnerDialog] = useState(false)
   const [showResponseDialog, setShowResponseDialog] = useState(false)
   const [selectedLead, setSelectedLead] = useState<any>(null)
+  const [leads, setLeads] = useState<Lead[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // Dados de exemplo
-  const leads = [
-    {
-      id: 1,
-      name: "João Silva",
-      email: "joao.silva@email.com",
-      phone: "+55 11 98765-4321",
-      destination: "Dublin",
-      status: "Novo",
-      date: "15/05/2023",
-      message: "Olá, estou interessado em acomodações em Dublin para um período de 6 meses a partir de setembro.",
-    },
-    {
-      id: 2,
-      name: "Maria Oliveira",
-      email: "maria.oliveira@email.com",
-      phone: "+55 21 98765-4321",
-      destination: "Cork",
-      status: "Respondido",
-      date: "12/05/2023",
-      message: "Preciso de uma acomodação em Cork para 3 meses, a partir de agosto. Prefiro algo próximo ao centro.",
-    },
-    {
-      id: 3,
-      name: "Pedro Santos",
-      email: "pedro.santos@email.com",
-      phone: "+55 31 98765-4321",
-      destination: "Galway",
-      status: "Convertido",
-      date: "10/05/2023",
-      message: "Estou procurando uma casa de família em Galway para melhorar meu inglês. Período de 4 meses.",
-    },
-    {
-      id: 4,
-      name: "Ana Souza",
-      email: "ana.souza@email.com",
-      phone: "+55 41 98765-4321",
-      destination: "Dublin",
-      status: "Novo",
-      date: "08/05/2023",
-      message: "Gostaria de informações sobre residências estudantis em Dublin para o próximo semestre.",
-    },
-    {
-      id: 5,
-      name: "Lucas Ferreira",
-      email: "lucas.ferreira@email.com",
-      phone: "+55 51 98765-4321",
-      destination: "Limerick",
-      status: "Respondido",
-      date: "05/05/2023",
-      message: "Preciso de um apartamento compartilhado em Limerick para mim e mais um amigo. Orçamento de até €800.",
-    },
-  ]
+  useEffect(() => {
+    carregarLeads()
+  }, [])
 
-  const partners = [
-    {
-      id: 1,
-      name: "Dublin Student Housing",
-      email: "contact@dublinhousing.ie",
-      phone: "+353 1 234 5678",
-      type: "Residência Estudantil",
-      locations: ["Dublin"],
-      status: "Ativo",
-    },
-    {
-      id: 2,
-      name: "Cork Homestays",
-      email: "info@corkhomestays.ie",
-      phone: "+353 21 234 5678",
-      type: "Casa de Família",
-      locations: ["Cork"],
-      status: "Ativo",
-    },
-    {
-      id: 3,
-      name: "Galway Apartments",
-      email: "rentals@galwayapts.ie",
-      phone: "+353 91 234 5678",
-      type: "Apartamentos",
-      locations: ["Galway"],
-      status: "Ativo",
-    },
-    {
-      id: 4,
-      name: "Ireland Student Living",
-      email: "info@irelandstudent.ie",
-      phone: "+353 1 987 6543",
-      type: "Residência Estudantil",
-      locations: ["Dublin", "Cork", "Galway"],
-      status: "Ativo",
-    },
-    {
-      id: 5,
-      name: "Emerald Accommodations",
-      email: "contact@emeraldacc.ie",
-      phone: "+353 1 567 8901",
-      type: "Apartamentos",
-      locations: ["Dublin", "Limerick"],
-      status: "Inativo",
-    },
-  ]
+  const carregarLeads = async () => {
+    try {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('leads_acomodacoes')
+        .select('*')
+        .order('data_envio', { ascending: false })
+
+      if (error) throw error
+      if (data) setLeads(data)
+    } catch (error: any) {
+      console.error('Erro ao carregar leads:', error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formatarData = (data: string) => {
+    return format(new Date(data), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
+  }
+
+  const tiposAcomodacao = {
+    apartamento: 'Apartamento Compartilhado',
+    studio: 'Studio Individual',
+    residencia: 'Residência Estudantil',
+    homestay: 'Casa de Família',
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -246,55 +193,71 @@ export default function AdminDashboard() {
                   <CardDescription>Gerencie os leads que chegaram através do formulário de cotação.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Nome</TableHead>
-                          <TableHead>Destino</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Data</TableHead>
-                          <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {leads.map((lead) => (
-                          <TableRow key={lead.id}>
-                            <TableCell className="font-medium">{lead.name}</TableCell>
-                            <TableCell>{lead.destination}</TableCell>
-                            <TableCell>{getStatusBadge(lead.status)}</TableCell>
-                            <TableCell>{lead.date}</TableCell>
-                            <TableCell className="text-right">
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="icon">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                    <span className="sr-only">Abrir menu</span>
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem onClick={() => handleOpenResponseDialog(lead)}>
-                                    <MessageSquare className="mr-2 h-4 w-4" />
-                                    Responder
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    <Edit className="mr-2 h-4 w-4" />
-                                    Editar Status
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    <Trash2 className="mr-2 h-4 w-4" />
-                                    Excluir
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
+                  {loading ? (
+                    <div className="text-center py-8">Carregando leads...</div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Nome</TableHead>
+                            <TableHead>E-mail</TableHead>
+                            <TableHead>WhatsApp</TableHead>
+                            <TableHead>Cidade</TableHead>
+                            <TableHead>Acomodação</TableHead>
+                            <TableHead>Data Chegada</TableHead>
+                            <TableHead>Duração</TableHead>
+                            <TableHead>Data Envio</TableHead>
+                            <TableHead className="text-right">Ações</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
+                        </TableHeader>
+                        <TableBody>
+                          {leads.map((lead) => (
+                            <TableRow key={lead.id}>
+                              <TableCell className="font-medium">{lead.nome}</TableCell>
+                              <TableCell>{lead.email}</TableCell>
+                              <TableCell>{lead.whatsapp}</TableCell>
+                              <TableCell>{lead.cidade}</TableCell>
+                              <TableCell>{tiposAcomodacao[lead.tipo_acomodacao as keyof typeof tiposAcomodacao]}</TableCell>
+                              <TableCell>{formatarData(lead.data_chegada)}</TableCell>
+                              <TableCell>
+                                {lead.duracao === '12+'
+                                  ? 'Mais de 12 meses'
+                                  : `${lead.duracao} meses`}
+                              </TableCell>
+                              <TableCell>{formatarData(lead.data_envio)}</TableCell>
+                              <TableCell className="text-right">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                      <span className="sr-only">Abrir menu</span>
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => handleOpenResponseDialog(lead)}>
+                                      <MessageSquare className="mr-2 h-4 w-4" />
+                                      Responder
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Edit className="mr-2 h-4 w-4" />
+                                      Editar Status
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Trash2 className="mr-2 h-4 w-4" />
+                                      Excluir
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -329,12 +292,12 @@ export default function AdminDashboard() {
                           <CardHeader className="bg-gray-50 pb-3">
                             <div className="flex justify-between items-start">
                               <div>
-                                <CardTitle className="text-lg">{lead.name}</CardTitle>
+                                <CardTitle className="text-lg">{lead.nome}</CardTitle>
                                 <CardDescription>
-                                  {lead.email} • {lead.phone} • {lead.date}
+                                  {lead.email} • {lead.whatsapp} • {formatarData(lead.data_envio)}
                                 </CardDescription>
                               </div>
-                              <Badge className="bg-blue-500">{lead.destination}</Badge>
+                              <Badge className="bg-blue-500">{lead.cidade}</Badge>
                             </div>
                           </CardHeader>
                           <CardContent className="pt-4">
@@ -512,10 +475,10 @@ export default function AdminDashboard() {
                 <p className="text-graphite-300">{selectedLead.message}</p>
                 <div className="mt-2 text-sm text-graphite-300">
                   <p>
-                    De: {selectedLead.name} ({selectedLead.email})
+                    De: {selectedLead.nome} ({selectedLead.email})
                   </p>
-                  <p>Destino: {selectedLead.destination}</p>
-                  <p>Data: {selectedLead.date}</p>
+                  <p>Destino: {selectedLead.cidade}</p>
+                  <p>Data: {formatarData(selectedLead.data_envio)}</p>
                 </div>
               </div>
               <div>
@@ -526,11 +489,11 @@ export default function AdminDashboard() {
                   id="response"
                   rows={8}
                   placeholder="Digite sua resposta aqui..."
-                  defaultValue={`Olá ${selectedLead.name},
+                  defaultValue={`Olá ${selectedLead.nome},
 
 Obrigado por entrar em contato com a AcomodaFácil!
 
-Recebemos sua solicitação sobre acomodações em ${selectedLead.destination} e temos excelentes opções que podem atender às suas necessidades.
+Recebemos sua solicitação sobre acomodações em ${selectedLead.cidade} e temos excelentes opções que podem atender às suas necessidades.
 
 Podemos agendar uma conversa para discutir mais detalhes sobre suas preferências e orçamento?
 
