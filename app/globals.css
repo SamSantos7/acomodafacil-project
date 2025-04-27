@@ -74,8 +74,9 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden min-h-screen;
     font-family: var(--font-poppins), sans-serif;
+    -webkit-overflow-scrolling: touch;
   }
   h1,
   h2,
@@ -84,6 +85,21 @@
   h5,
   h6 {
     font-family: var(--font-playfair), serif;
+  }
+}
+
+input, textarea, select {
+  @apply w-full px-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent;
+  font-size: 16px; /* Previne zoom no iOS */
+}
+
+.form-container {
+  @apply max-w-full mx-auto p-4 md:p-6;
+}
+
+@media (max-width: 768px) {
+  .container {
+    @apply px-4;
   }
 }
 

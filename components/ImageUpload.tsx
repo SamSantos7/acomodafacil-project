@@ -1,93 +1,97 @@
-'use client'
 
-import { useState } from 'react'
-import { Upload } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
-import { toast } from 'sonner'
+import Image from 'next/image';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Upload, X } from 'lucide-react';
 
 interface ImageUploadProps {
-  onUploadComplete: (url: string) => void
-  bucket?: string
-  maxSize?: number // em MB
+  onImageUpload: (file: File) => void;
+  currentImage?: string;
+  required?: boolean;
 }
 
-export function ImageUpload({
-  onUploadComplete,
-  bucket = 'images',
-  maxSize = 5,
-}: ImageUploadProps) {
-  const [uploading, setUploading] = useState(false)
+export function ImageUpload({ onImageUpload, currentImage, required = true }: ImageUploadProps) {
+  const [preview, setPreview] = useState<string>(currentImage || '');
+  const [error, setError] = useState<string>('');
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      if (!e.target.files || e.target.files.length === 0) {
-        throw new Error('Você precisa selecionar uma imagem para fazer upload')
-      }
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setError('');
 
-      const file = e.target.files[0]
-      const fileSizeInMB = file.size / (1024 * 1024)
+    if (!file) return;
 
-      if (fileSizeInMB > maxSize) {
-        throw new Error(`O arquivo deve ter no máximo ${maxSize}MB`)
-      }
-
-      if (!file.type.startsWith('image/')) {
-        throw new Error('O arquivo deve ser uma imagem')
-      }
-
-      setUploading(true)
-
-      // Criar nome único para o arquivo
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
-
-      // Upload para o Supabase Storage
-      const { data, error } = await supabase.storage
-        .from(bucket)
-        .upload(filePath, file)
-
-      if (error) throw error
-
-      // Obter URL pública
-      const { data: { publicUrl } } = supabase.storage
-        .from(bucket)
-        .getPublicUrl(filePath)
-
-      onUploadComplete(publicUrl)
-      toast.success('Imagem enviada com sucesso!')
-    } catch (error: any) {
-      toast.error('Erro ao fazer upload: ' + error.message)
-    } finally {
-      setUploading(false)
+    if (!file.type.startsWith('image/')) {
+      setError('Por favor, selecione uma imagem válida.');
+      return;
     }
-  }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+    onImageUpload(file);
+  };
+
+  const removeImage = () => {
+    setPreview('');
+    if (required) {
+      setError('Uma imagem é obrigatória');
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center w-full">
-      <label
-        htmlFor="dropzone-file"
-        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
-      >
-        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-          <Upload className="w-10 h-10 mb-3 text-gray-400" />
-          <p className="mb-2 text-sm text-gray-500">
-            <span className="font-semibold">Clique para fazer upload</span> ou
-            arraste e solte
-          </p>
-          <p className="text-xs text-gray-500">
-            PNG, JPG ou GIF (max. {maxSize}MB)
-          </p>
-        </div>
+    <div className="space-y-4">
+      <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-gray-200">
+        {preview ? (
+          <>
+            <Image
+              src={preview}
+              alt="Preview"
+              fill
+              className="object-cover"
+            />
+            <button
+              onClick={removeImage}
+              className="absolute top-2 right-2 p-1 bg-white rounded-full shadow-lg"
+              type="button"
+            >
+              <X className="h-5 w-5 text-gray-500" />
+            </button>
+          </>
+        ) : (
+          <div className="flex items-center justify-center h-full bg-gray-50">
+            <Image
+              src="/placeholder.jpg"
+              alt="Imagem não disponível"
+              width={200}
+              height={150}
+              className="opacity-50"
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => document.getElementById('imageInput')?.click()}
+          className="w-full"
+        >
+          <Upload className="h-4 w-4 mr-2" />
+          {preview ? 'Trocar imagem' : 'Enviar imagem'}
+        </Button>
         <input
-          id="dropzone-file"
+          id="imageInput"
           type="file"
-          className="hidden"
           accept="image/*"
-          onChange={handleUpload}
-          disabled={uploading}
+          onChange={handleImageUpload}
+          className="hidden"
+          required={required}
         />
-      </label>
+        {error && <p className="text-sm text-red-500">{error}</p>}
+      </div>
     </div>
-  )
-} 
+  );
+}
