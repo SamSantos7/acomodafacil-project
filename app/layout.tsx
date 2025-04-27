@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Poppins, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import Navbar from "@/components/navbar"
+import { Navbar } from "@/components/navbar"
 import Footer from "@/components/footer"
 
 const poppins = Poppins({
