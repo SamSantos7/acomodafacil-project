@@ -1,7 +1,7 @@
 'use client'
 
-import { Navbar } from '../components/navbar'
-import { WhatsappButton } from '../components/WhatsappButton'
+import { Navbar } from '@/components/navbar'
+import { WhatsappButton } from '@/components/WhatsappButton'
 
 export default function Template({ children }: { children: React.ReactNode }) {
   return (

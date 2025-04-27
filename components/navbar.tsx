@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Menu, X, ChevronDown } from "lucide-react"
 
-export default function Navbar() {
+export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isDestinationsOpen, setIsDestinationsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
