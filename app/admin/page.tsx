@@ -86,6 +86,10 @@ export default function AdminDashboard() {
       status: "Novo",
       date: "15/05/2023",
       message: "Olá, estou interessado em acomodações em Dublin para um período de 6 meses a partir de setembro.",
+      type: "Residência Estudantil",
+      weeks: 26,
+      startDate: "2023-09-01",
+      people: 1,
     },
     {
       id: 2,
@@ -96,6 +100,10 @@ export default function AdminDashboard() {
       status: "Respondido",
       date: "12/05/2023",
       message: "Preciso de uma acomodação em Cork para 3 meses, a partir de agosto. Prefiro algo próximo ao centro.",
+      type: "Casa de Família",
+      weeks: 12,
+      startDate: "2023-08-01",
+      people: 1,
     },
     {
       id: 3,
@@ -106,6 +114,10 @@ export default function AdminDashboard() {
       status: "Convertido",
       date: "10/05/2023",
       message: "Estou procurando uma casa de família em Galway para melhorar meu inglês. Período de 4 meses.",
+      type: "Casa de Família",
+      weeks: 16,
+      startDate: "2023-08-15",
+      people: 1,
     },
     {
       id: 4,
@@ -116,6 +128,10 @@ export default function AdminDashboard() {
       status: "Novo",
       date: "08/05/2023",
       message: "Gostaria de informações sobre residências estudantis em Dublin para o próximo semestre.",
+      type: "Apartamento Compartilhado",
+      weeks: 20,
+      startDate: "2023-10-01",
+      people: 2,
     },
     {
       id: 5,
@@ -126,6 +142,10 @@ export default function AdminDashboard() {
       status: "Respondido",
       date: "05/05/2023",
       message: "Preciso de um apartamento compartilhado em Limerick para mim e mais um amigo. Orçamento de até €800.",
+      type: "Apartamento Compartilhado",
+      weeks: 8,
+      startDate: "2023-07-15",
+      people: 2,
     },
   ]
 
@@ -550,9 +570,14 @@ export default function AdminDashboard() {
                       <TableHeader>
                         <TableRow>
                           <TableHead>Nome</TableHead>
+                          <TableHead>Email</TableHead>
                           <TableHead>Destino</TableHead>
+                          <TableHead>Tipo</TableHead>
+                          <TableHead>Semanas</TableHead>
+                          <TableHead>Data Início</TableHead>
+                          <TableHead>Pessoas</TableHead>
+                          <TableHead>Cadastro</TableHead>
                           <TableHead>Status</TableHead>
-                          <TableHead>Data</TableHead>
                           <TableHead className="text-right">Ações</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -560,9 +585,14 @@ export default function AdminDashboard() {
                         {leads.map((lead) => (
                           <TableRow key={lead.id}>
                             <TableCell className="font-medium">{lead.name}</TableCell>
+                            <TableCell>{lead.email}</TableCell>
                             <TableCell>{lead.destination}</TableCell>
-                            <TableCell>{getStatusBadge(lead.status)}</TableCell>
+                            <TableCell>{lead.type}</TableCell>
+                            <TableCell>{lead.weeks}</TableCell>
+                            <TableCell>{lead.startDate}</TableCell>
+                            <TableCell>{lead.people}</TableCell>
                             <TableCell>{lead.date}</TableCell>
+                            <TableCell>{getStatusBadge(lead.status)}</TableCell>
                             <TableCell className="text-right">
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -802,7 +832,7 @@ export default function AdminDashboard() {
                 <div className="flex gap-2">
                   <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                    <Input type="search" placeholder="Buscar acomodações..." className="pl-8 w-full md:w-[250px]" />
+                    <Input type="search" placeholder="Buscar acomodações..." className="pl-8 wfull md:w-[250px]" />
                   </div>
                   <Dialog open={showAddAccommodationDialog} onOpenChange={setShowAddAccommodationDialog}>
                     <DialogTrigger asChild>

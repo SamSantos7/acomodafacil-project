@@ -19,8 +19,11 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "AcomodaFácil - Seu lar no intercâmbio começa aqui",
-  description:
-    "Encontre as melhores acomodações para estudantes brasileiros na Irlanda. Serviço especializado para intercambistas.",
+  description: "Descubra acomodações estudantis selecionadas especialmente para você. AcomodaFácil: Seu lar no intercâmbio começa aqui.",
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
 }
 
 export default function RootLayout({
