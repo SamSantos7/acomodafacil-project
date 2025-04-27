@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useEffect, useRef, useState } from "react"
@@ -5,7 +6,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { CheckCircle, MapPin, Star, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
+import { CheckCircle, MapPin, Star, ArrowRight, ChevronLeft, ChevronRight, Bed } from "lucide-react"
 import TestimonialCard from "@/components/testimonial-card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
@@ -13,6 +14,7 @@ import { Input } from "@/components/ui/input"
 export default function Home() {
   const [activeSlide, setActiveSlide] = useState(0)
   const featuredRef = useRef<HTMLDivElement>(null)
+  const [accommodations, setAccommodations] = useState([])
 
   // Parallax effect
   const [offsetY, setOffsetY] = useState(0)
@@ -245,107 +247,108 @@ export default function Home() {
           ) : (
             <div className="relative">
               <div className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory" ref={featuredRef}>
-              {[
-                {
-                  title: "Residência Estudantil Premium",
-                  location: "Dublin",
-                  price: "€950/mês",
-                  features: ["Quarto individual", "Banheiro privativo", "Área comum", "Wi-Fi de alta velocidade"],
-                  image: "/images/student-residence.png",
-                },
-                {
-                  title: "Apartamento Compartilhado",
-                  location: "Cork",
-                  price: "€750/mês",
-                  features: ["Quarto mobiliado", "Cozinha equipada", "Localização central", "Contas inclusas"],
-                  image: "/images/shared-apartment.png",
-                },
-                {
-                  title: "Casa de Família Selecionada",
-                  location: "Galway",
-                  price: "€850/mês",
-                  features: ["Quarto privativo", "Café da manhã e jantar", "Ambiente familiar", "Prática de inglês"],
-                  image: "/images/homestay.png",
-                },
-                {
-                  title: "Estúdio Individual",
-                  location: "Limerick",
-                  price: "€1050/mês",
-                  features: [
-                    "Totalmente mobiliado",
-                    "Independência total",
-                    "Localização privilegiada",
-                    "Segurança 24h",
-                  ],
-                  image: "/images/apartment-living.png",
-                },
-              ].map((item, index) => (
-                <div key={index} className="min-w-[300px] md:min-w-[350px] snap-start">
-                  <Card className="border-none shadow-xl overflow-hidden card-hover h-full">
-                    <div className="relative h-[200px]">
-                      <Image src={item.image || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
-                    </div>
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-start mb-3">
-                        <div>
-                          <h3 className="text-xl font-bold text-graphite-400">{item.title}</h3>
-                          <p className="text-sm text-graphite-300 flex items-center gap-1">
-                            <MapPin className="h-3 w-3" /> {item.location}
-                          </p>
-                        </div>
-                        <span className="text-teal-500 font-bold">{item.price}</span>
+                {[
+                  {
+                    title: "Residência Estudantil Premium",
+                    location: "Dublin",
+                    price: "€950/mês",
+                    features: ["Quarto individual", "Banheiro privativo", "Área comum", "Wi-Fi de alta velocidade"],
+                    image: "/images/student-residence.png",
+                  },
+                  {
+                    title: "Apartamento Compartilhado",
+                    location: "Cork",
+                    price: "€750/mês",
+                    features: ["Quarto mobiliado", "Cozinha equipada", "Localização central", "Contas inclusas"],
+                    image: "/images/shared-apartment.png",
+                  },
+                  {
+                    title: "Casa de Família Selecionada",
+                    location: "Galway",
+                    price: "€850/mês",
+                    features: ["Quarto privativo", "Café da manhã e jantar", "Ambiente familiar", "Prática de inglês"],
+                    image: "/images/homestay.png",
+                  },
+                  {
+                    title: "Estúdio Individual",
+                    location: "Limerick",
+                    price: "€1050/mês",
+                    features: [
+                      "Totalmente mobiliado",
+                      "Independência total",
+                      "Localização privilegiada",
+                      "Segurança 24h",
+                    ],
+                    image: "/images/apartment-living.png",
+                  },
+                ].map((item, index) => (
+                  <div key={index} className="min-w-[300px] md:min-w-[350px] snap-start">
+                    <Card className="border-none shadow-xl overflow-hidden card-hover h-full">
+                      <div className="relative h-[200px]">
+                        <Image src={item.image || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
                       </div>
-                      <ul className="space-y-2 mt-4">
-                        {item.features.map((feature, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-graphite-300">
-                            <CheckCircle className="h-4 w-4 text-gold-500 flex-shrink-0 mt-0.5" />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                      <Button asChild className="w-full mt-6 bg-teal-500 hover:bg-teal-600 text-white">
-                        <Link href="/acomodacoes">Ver Detalhes</Link>
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-start mb-3">
+                          <div>
+                            <h3 className="text-xl font-bold text-graphite-400">{item.title}</h3>
+                            <p className="text-sm text-graphite-300 flex items-center gap-1">
+                              <MapPin className="h-3 w-3" /> {item.location}
+                            </p>
+                          </div>
+                          <span className="text-teal-500 font-bold">{item.price}</span>
+                        </div>
+                        <ul className="space-y-2 mt-4">
+                          {item.features.map((feature, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-graphite-300">
+                              <CheckCircle className="h-4 w-4 text-gold-500 flex-shrink-0 mt-0.5" />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                        <Button asChild className="w-full mt-6 bg-teal-500 hover:bg-teal-600 text-white">
+                          <Link href="/acomodacoes">Ver Detalhes</Link>
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={prevSlide}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white rounded-full p-3 shadow-lg text-graphite-400 hover:text-teal-500 transition-colors z-10 hidden md:block"
+                aria-label="Anterior"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white rounded-full p-3 shadow-lg text-graphite-400 hover:text-teal-500 transition-colors z-10 hidden md:block"
+                aria-label="Próximo"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+              <div className="flex justify-center gap-2 mt-6">
+                {[0, 1, 2, 3].map((index) => (
+                  <button
+                    key={index}
+                    className={`h-2 rounded-full transition-all ${
+                      activeSlide === index ? "w-8 bg-teal-500" : "w-2 bg-gray-300"
+                    }`}
+                    onClick={() => {
+                      if (featuredRef.current) {
+                        featuredRef.current.scrollTo({
+                          left: index * 320,
+                          behavior: "smooth",
+                        })
+                        setActiveSlide(index)
+                      }
+                    }}
+                    aria-label={`Ir para slide ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
-            <button
-              onClick={prevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white rounded-full p-3 shadow-lg text-graphite-400 hover:text-teal-500 transition-colors z-10 hidden md:block"
-              aria-label="Anterior"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-white rounded-full p-3 shadow-lg text-graphite-400 hover:text-teal-500 transition-colors z-10 hidden md:block"
-              aria-label="Próximo"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-            <div className="flex justify-center gap-2 mt-6">
-              {[0, 1, 2, 3].map((index) => (
-                <button
-                  key={index}
-                  className={`h-2 rounded-full transition-all ${
-                    activeSlide === index ? "w-8 bg-teal-500" : "w-2 bg-gray-300"
-                  }`}
-                  onClick={() => {
-                    if (featuredRef.current) {
-                      featuredRef.current.scrollTo({
-                        left: index * 320,
-                        behavior: "smooth",
-                      })
-                      setActiveSlide(index)
-                    }
-                  }}
-                  aria-label={`Ir para slide ${index + 1}`}
-                />
-              ))}
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
