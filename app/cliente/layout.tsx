@@ -12,7 +12,8 @@ import {
   FileText,
   LogOut,
   Menu,
-  X
+  X,
+  CalendarDays
 } from "lucide-react"
 
 export default function ClienteLayout({
@@ -59,6 +60,11 @@ export default function ClienteLayout({
       href: "/cliente/documentos",
       label: "Documentos",
       icon: FileText
+    },
+    {
+      href: "/cliente/reservas",
+      label: "Reservas",
+      icon: CalendarDays
     }
   ]
 
