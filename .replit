@@ -21,4 +21,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "next dev -H 0.0.0.0"
+args = "next dev -H 0.0.0.0 -p 3000"
