@@ -1,97 +1,69 @@
-
-import Image from 'next/image';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Upload, X } from 'lucide-react';
+import { useState } from 'react'
+import { Upload, X } from 'lucide-react'
+import Image from 'next/image'
 
 interface ImageUploadProps {
-  onImageUpload: (file: File) => void;
-  currentImage?: string;
-  required?: boolean;
+  onImageChange: (file: File | null) => void
+  required?: boolean
+  defaultImage?: string
 }
 
-export function ImageUpload({ onImageUpload, currentImage, required = true }: ImageUploadProps) {
-  const [preview, setPreview] = useState<string>(currentImage || '');
-  const [error, setError] = useState<string>('');
+export function ImageUpload({ onImageChange, required = false, defaultImage }: ImageUploadProps) {
+  const [preview, setPreview] = useState<string>(defaultImage || '/placeholder.jpg')
+  const [error, setError] = useState<string>('')
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    setError('');
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    setError('')
 
-    if (!file) return;
+    if (!file) {
+      if (required) {
+        setError('Imagem é obrigatória')
+      }
+      setPreview('/placeholder.jpg')
+      onImageChange(null)
+      return
+    }
 
     if (!file.type.startsWith('image/')) {
-      setError('Por favor, selecione uma imagem válida.');
-      return;
+      setError('Por favor, selecione uma imagem válida')
+      return
     }
 
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onloadend = () => {
-      setPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-    onImageUpload(file);
-  };
-
-  const removeImage = () => {
-    setPreview('');
-    if (required) {
-      setError('Uma imagem é obrigatória');
+      setPreview(reader.result as string)
     }
-  };
+    reader.readAsDataURL(file)
+    onImageChange(file)
+  }
 
   return (
-    <div className="space-y-4">
-      <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-gray-200">
-        {preview ? (
-          <>
-            <Image
-              src={preview}
-              alt="Preview"
-              fill
-              className="object-cover"
-            />
-            <button
-              onClick={removeImage}
-              className="absolute top-2 right-2 p-1 bg-white rounded-full shadow-lg"
-              type="button"
-            >
-              <X className="h-5 w-5 text-gray-500" />
-            </button>
-          </>
-        ) : (
-          <div className="flex items-center justify-center h-full bg-gray-50">
-            <Image
-              src="/placeholder.jpg"
-              alt="Imagem não disponível"
-              width={200}
-              height={150}
-              className="opacity-50"
-            />
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => document.getElementById('imageInput')?.click()}
-          className="w-full"
-        >
-          <Upload className="h-4 w-4 mr-2" />
-          {preview ? 'Trocar imagem' : 'Enviar imagem'}
-        </Button>
-        <input
-          id="imageInput"
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="hidden"
-          required={required}
+    <div className="space-y-2">
+      <div className="relative w-full aspect-video rounded-lg overflow-hidden border-2 border-dashed border-gray-200 hover:border-gray-300 transition-colors">
+        <Image
+          src={preview}
+          alt="Preview"
+          fill
+          className="object-cover"
         />
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        <label className="absolute inset-0 flex flex-col items-center justify-center bg-black/5 cursor-pointer group">
+          <div className="p-4 text-center">
+            <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400 group-hover:text-gray-500" />
+            <p className="text-sm text-gray-500">Clique para fazer upload</p>
+          </div>
+          <input
+            type="file"
+            className="hidden"
+            accept="image/*"
+            onChange={handleImageChange}
+            required={required}
+          />
+        </label>
       </div>
+      {error && (
+        <p className="text-sm text-red-500">{error}</p>
+      )}
     </div>
-  );
+  )
 }

@@ -54,7 +54,7 @@ export default function ReservationForm({ accommodationName, weeklyPrice }: Rese
   const totalPrice = weeks * weeklyPrice
 
   return (
-    <div className="border border-gray-200 rounded-lg p-6">
+    <div className="border border-gray-200 rounded-lg p-4 md:p-6 w-full max-w-md mx-auto">
       <h3 className="text-xl font-semibold mb-4">Solicitar Reserva</h3>
 
       {submitResult ? (
