@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useEffect, useState } from "react"
@@ -13,7 +12,8 @@ import {
   LogOut,
   Menu,
   X,
-  CalendarDays
+  CalendarDays,
+  Bell
 } from "lucide-react"
 
 export default function ClienteLayout({
@@ -29,7 +29,7 @@ export default function ClienteLayout({
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      
+
       if (!user) {
         router.push("/login")
       } else {
@@ -65,6 +65,11 @@ export default function ClienteLayout({
       href: "/cliente/reservas",
       label: "Reservas",
       icon: CalendarDays
+    },
+    {
+      href: "/cliente/notificacoes",
+      label: "Notificações",
+      icon: Bell
     }
   ]
 
