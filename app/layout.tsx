@@ -18,10 +18,9 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: "AcomodaFácil | Acomodações para Estudantes Brasileiros na Irlanda",
+  title: "AcomodaFácil - Seu lar no intercâmbio começa aqui",
   description:
     "Encontre as melhores acomodações para estudantes brasileiros na Irlanda. Serviço especializado para intercambistas.",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
