@@ -104,16 +104,25 @@ export default function Home() {
           </div>
 
           <div className="max-w-5xl mx-auto">
-            <Card className="border-none shadow-xl">
+            <Card className="border-none shadow-xl bg-white/80 backdrop-blur-sm">
               <CardContent className="p-8">
-                <form className="space-y-6">
-                  <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+                <form 
+                  className="space-y-6" 
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    const formData = new FormData(e.currentTarget)
+                    const params = new URLSearchParams()
+                    formData.forEach((value, key) => params.append(key, value.toString()))
+                    window.location.href = `/acomodacoes?${params.toString()}`
+                  }}
+                >
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     <div className="space-y-2">
                       <label htmlFor="destino" className="text-sm font-medium text-graphite-400">
                         Destino
                       </label>
-                      <Select>
-                        <SelectTrigger id="destino" className="border-sand-200 focus:ring-teal-500">
+                      <Select name="destino" required>
+                        <SelectTrigger id="destino" className="border-sand-200 focus:ring-gold-500">
                           <SelectValue placeholder="Selecione o destino" />
                         </SelectTrigger>
                         <SelectContent>
@@ -121,7 +130,6 @@ export default function Home() {
                           <SelectItem value="cork">Cork</SelectItem>
                           <SelectItem value="galway">Galway</SelectItem>
                           <SelectItem value="limerick">Limerick</SelectItem>
-                          <SelectItem value="waterford">Waterford</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -130,8 +138,8 @@ export default function Home() {
                       <label htmlFor="tipo" className="text-sm font-medium text-graphite-400">
                         Tipo de Acomodação
                       </label>
-                      <Select>
-                        <SelectTrigger id="tipo" className="border-sand-200 focus:ring-teal-500">
+                      <Select name="tipo" required>
+                        <SelectTrigger id="tipo" className="border-sand-200 focus:ring-gold-500">
                           <SelectValue placeholder="Selecione o tipo" />
                         </SelectTrigger>
                         <SelectContent>
@@ -147,8 +155,8 @@ export default function Home() {
                       <label htmlFor="semanas" className="text-sm font-medium text-graphite-400">
                         Quantidade de Semanas
                       </label>
-                      <Select>
-                        <SelectTrigger id="semanas" className="border-sand-200 focus:ring-teal-500">
+                      <Select name="semanas" required>
+                        <SelectTrigger id="semanas" className="border-sand-200 focus:ring-gold-500">
                           <SelectValue placeholder="Selecione" />
                         </SelectTrigger>
                         <SelectContent>
@@ -167,8 +175,19 @@ export default function Home() {
                       </label>
                       <Input
                         id="data"
+                        name="data"
                         type="date"
-                        className="border-sand-200 focus:border-teal-500 focus:ring-teal-500"
+                        required
+                        className="border-sand-200 focus:border-gold-500 focus:ring-gold-500"
+                        onChange={(e) => {
+                          const date = new Date(e.target.value)
+                          const day = date.getDay()
+                          if (day !== 0 && day !== 6) {
+                            e.target.setCustomValidity('Por favor, selecione um sábado ou domingo')
+                          } else {
+                            e.target.setCustomValidity('')
+                          }
+                        }}
                       />
                     </div>
 
@@ -176,8 +195,8 @@ export default function Home() {
                       <label htmlFor="pessoas" className="text-sm font-medium text-graphite-400">
                         Quantidade de Pessoas
                       </label>
-                      <Select>
-                        <SelectTrigger id="pessoas" className="border-sand-200 focus:ring-teal-500">
+                      <Select name="pessoas" required>
+                        <SelectTrigger id="pessoas" className="border-sand-200 focus:ring-gold-500">
                           <SelectValue placeholder="Selecione" />
                         </SelectTrigger>
                         <SelectContent>
@@ -191,8 +210,11 @@ export default function Home() {
                     </div>
 
                     <div className="flex items-end">
-                      <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white">
-                        Buscar
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-gold-500 hover:bg-gold-600 text-white font-semibold text-lg shadow-lg transition-all duration-200 hover:scale-[1.02]"
+                      >
+                        Buscar Acomodações
                       </Button>
                     </div>
                   </div>
@@ -213,8 +235,16 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="relative">
-            <div className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory" ref={featuredRef}>
+          {accommodations.length === 0 ? (
+            <div className="text-center py-12">
+              <Bed className="h-16 w-16 mx-auto text-gray-300 mb-4" />
+              <p className="text-graphite-300 text-lg">
+                Nenhuma acomodação popular encontrada no momento.
+              </p>
+            </div>
+          ) : (
+            <div className="relative">
+              <div className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory" ref={featuredRef}>
               {[
                 {
                   title: "Residência Estudantil Premium",
