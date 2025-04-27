@@ -45,10 +45,15 @@ export default function ClienteDashboard() {
 
   return (
     <div className="container px-4 py-8">
-      <div className="mb-8">
+      <div className="mb-8 space-y-2">
         <h1 className="text-3xl font-bold text-graphite-400">
           Bem-vindo de volta, {user?.user_metadata?.nome || 'Cliente'}!
         </h1>
+        {diasRestantes > 0 && (
+          <p className="text-graphite-300">
+            Faltam {diasRestantes} dias para sua viagem!
+          </p>
+        )}
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

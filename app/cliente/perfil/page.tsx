@@ -1,118 +1,168 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Card } from "@/components/ui/card"
+import { useToast } from "@/components/ui/use-toast"
 import { supabase } from "@/lib/supabase"
-import { UserCircle, Mail, Phone, MapPin, Save } from "lucide-react"
 
-export default function PerfilCliente() {
-  const [user, setUser] = useState<any>(null)
+export default function ProfilePage() {
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
   const [profile, setProfile] = useState({
-    nome: "",
-    telefone: "",
-    endereco: "",
+    nome_completo: "",
+    data_nascimento: "",
+    email: "",
+    instituicao_ensino: "",
+    data_viagem: "",
+    cidade: "",
+    estado: "",
+    numero_contato: ""
   })
 
   useEffect(() => {
-    const getProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        setUser(user)
-        setProfile({
-          nome: user.user_metadata?.nome || "",
-          telefone: user.user_metadata?.telefone || "",
-          endereco: user.user_metadata?.endereco || "",
-        })
-      }
-    }
-
-    getProfile()
+    loadProfile()
   }, [])
 
-  const handleUpdate = async () => {
-    try {
-      const { error } = await supabase.auth.updateUser({
-        data: profile
-      })
-
-      if (error) throw error
-      alert("Perfil atualizado com sucesso!")
-    } catch (error) {
-      alert("Erro ao atualizar perfil")
+  const loadProfile = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single()
+      
+      if (data) setProfile(data)
     }
   }
 
-  return (
-    <div className="container px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-graphite-400">Meu Perfil</h1>
-      </div>
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Informações Pessoais</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="nome">Nome Completo</Label>
-            <div className="flex gap-2">
-              <UserCircle className="w-5 h-5 text-graphite-300" />
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          user_id: user.id,
+          ...profile
+        })
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Erro ao salvar",
+          description: "Não foi possível atualizar seu perfil."
+        })
+      } else {
+        toast({
+          title: "Perfil atualizado",
+          description: "Suas informações foram salvas com sucesso."
+        })
+      }
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div className="container py-8">
+      <Card className="max-w-2xl mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Meu Perfil</h1>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="nome_completo">Nome Completo</Label>
               <Input
-                id="nome"
-                value={profile.nome}
-                onChange={(e) => setProfile({ ...profile, nome: e.target.value })}
-                placeholder="Seu nome completo"
+                id="nome_completo"
+                value={profile.nome_completo}
+                onChange={(e) => setProfile({...profile, nome_completo: e.target.value})}
+                required
               />
             </div>
-          </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="data_nascimento">Data de Nascimento</Label>
+              <Input
+                id="data_nascimento"
+                type="date"
+                value={profile.data_nascimento}
+                onChange={(e) => setProfile({...profile, data_nascimento: e.target.value})}
+                required
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <div className="flex gap-2">
-              <Mail className="w-5 h-5 text-graphite-300" />
+            <div className="space-y-2">
+              <Label htmlFor="email">E-mail</Label>
               <Input
                 id="email"
-                value={user?.email}
-                disabled
-                className="bg-gray-50"
+                type="email"
+                value={profile.email}
+                onChange={(e) => setProfile({...profile, email: e.target.value})}
+                required
               />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="telefone">Telefone</Label>
-            <div className="flex gap-2">
-              <Phone className="w-5 h-5 text-graphite-300" />
+            <div className="space-y-2">
+              <Label htmlFor="instituicao_ensino">Instituição de Ensino</Label>
               <Input
-                id="telefone"
-                value={profile.telefone}
-                onChange={(e) => setProfile({ ...profile, telefone: e.target.value })}
-                placeholder="Seu telefone"
+                id="instituicao_ensino"
+                value={profile.instituicao_ensino}
+                onChange={(e) => setProfile({...profile, instituicao_ensino: e.target.value})}
               />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="endereco">Endereço</Label>
-            <div className="flex gap-2">
-              <MapPin className="w-5 h-5 text-graphite-300" />
+            <div className="space-y-2">
+              <Label htmlFor="data_viagem">Data da Viagem</Label>
               <Input
-                id="endereco"
-                value={profile.endereco}
-                onChange={(e) => setProfile({ ...profile, endereco: e.target.value })}
-                placeholder="Seu endereço"
+                id="data_viagem"
+                type="date"
+                value={profile.data_viagem}
+                onChange={(e) => setProfile({...profile, data_viagem: e.target.value})}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="cidade">Cidade</Label>
+              <Input
+                id="cidade"
+                value={profile.cidade}
+                onChange={(e) => setProfile({...profile, cidade: e.target.value})}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="estado">Estado</Label>
+              <Input
+                id="estado"
+                value={profile.estado}
+                onChange={(e) => setProfile({...profile, estado: e.target.value})}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="numero_contato">Número de Contato</Label>
+              <Input
+                id="numero_contato"
+                value={profile.numero_contato}
+                onChange={(e) => setProfile({...profile, numero_contato: e.target.value})}
+                required
               />
             </div>
           </div>
 
-          <Button onClick={handleUpdate} className="w-full">
-            <Save className="w-4 h-4 mr-2" />
-            Salvar Alterações
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Salvando..." : "Salvar Alterações"}
           </Button>
-        </CardContent>
+        </form>
       </Card>
     </div>
   )
