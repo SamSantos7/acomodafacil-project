@@ -1,0 +1,123 @@
+Objetivo:
+Finalizar e aprimorar toda a estrutura do AcomodaFácil, corrigindo pendências, ativando novas funcionalidades, garantindo integração com o Supabase e automação via Resend.
+
+1. Upload e Download de Documentos
+Área do Cliente:
+Criar seção "Meus Documentos" no dashboard.
+
+Permitir upload de arquivos (PDF, JPG, PNG).
+
+Mostrar lista dos documentos enviados.
+
+Botão para baixar documentos recebidos do admin.
+
+Área do Admin:
+Criar seção "Documentos dos Clientes" no painel Admin.
+
+Ver e baixar documentos enviados pelo cliente.
+
+Fazer upload de documentos que serão enviados ao cliente.
+
+Mostrar data e nome do arquivo.
+
+2. Alteração e Cancelamento de Reservas
+Área do Cliente:
+Adicionar botão "Alterar Reserva" (abre formulário de solicitação de alteração).
+
+Adicionar botão "Cancelar Reserva" (com confirmação "Tem certeza que deseja cancelar?").
+
+Área do Admin:
+Visualizar pedidos de alteração/cancelamento.
+
+Aprovar ou rejeitar alterações/cancelamentos com registro no histórico.
+
+3. Contador de Dias para a Viagem
+Exibir no painel do cliente:
+"Faltam X dias para sua viagem!"
+
+Basear cálculo na "Data da Viagem" informada no cadastro.
+
+4. Notificações Internas e WhatsApp
+Ao ocorrer:
+
+Mudança de status da reserva
+
+Upload/Download de documentos
+
+Envio de mensagens internas
+
+Ações:
+
+Criar notificações internas no dashboard.
+
+Integrar envio de mensagem via WhatsApp (usando API como UltraMsg ou Zapi).
+
+5. Responsividade Total
+Corrigir:
+
+Scroll travado em notebooks e dispositivos móveis.
+
+Campos de formulários cortados no mobile.
+
+Layout desalinhado em tablets e celulares.
+
+Testar em:
+
+iPhone 12 (390px)
+
+Android padrão (360px)
+
+iPad (768px)
+
+Macbook 13" (1280px)
+
+Notebook (1366px)
+
+Full HD (1920px)
+
+6. Inclusão Obrigatória de Imagens
+Em Destinos e Acomodações:
+
+Exigir uma imagem obrigatória ao cadastrar.
+
+Se faltar imagem, mostrar um placeholder ("Imagem não disponível").
+
+7. Ativação Completa das Áreas Admin e Cliente
+Liberar funcionalidades:
+
+Upload/download de documentos.
+
+Envio e recebimento de mensagens.
+
+Alteração e cancelamento de reservas.
+
+Visualização e atualização de dados dos clientes.
+
+Gerenciamento de reservas por filtros (status, cidade, data).
+
+8. Atualizar Campos do Cadastro do Cliente
+Nome completo
+
+Data de nascimento
+
+E-mail
+
+Senha
+
+Instituição de ensino
+
+Data da viagem
+
+Cidade
+
+Estado
+
+Número de contato
+
+9. Extras de Usabilidade
+Mostrar feedback visual (ex: "Upload realizado com sucesso").
+
+Implementar loading suave nas páginas de Admin e Cliente.
+
+Mensagem de boas-vindas personalizada no dashboard:
+"Bem-vindo de volta, [Nome]!"
