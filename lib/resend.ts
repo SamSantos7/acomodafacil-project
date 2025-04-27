@@ -1,8 +1,10 @@
+
 import { Resend } from 'resend'
+import type { Lead, Reservation } from './types'
 
 export const resend = new Resend(process.env.RESEND_API_KEY)
 
-export const sendLeadNotification = async (lead: any) => {
+export const sendLeadNotification = async (lead: Lead) => {
   try {
     const { data, error } = await resend.emails.send({
       from: 'AcomodaFácil <noreply@acomodafacil.com>',
@@ -28,25 +30,18 @@ export const sendLeadNotification = async (lead: any) => {
   }
 }
 
-export const sendLeadConfirmation = async (lead: any) => {
+export const sendReservationConfirmation = async (reservation: Reservation) => {
   try {
     const { data, error } = await resend.emails.send({
       from: 'AcomodaFácil <noreply@acomodafacil.com>',
-      to: [lead.email],
-      subject: 'Recebemos sua solicitação - AcomodaFácil',
+      to: [reservation.email],
+      subject: 'Confirmação de Reserva - AcomodaFácil',
       html: `
-        <h1>Olá ${lead.nome}!</h1>
-        <p>Recebemos sua solicitação de acomodação e agradecemos seu interesse!</p>
-        <p>Nossa equipe está analisando suas preferências e em breve entraremos em contato com opções personalizadas para você.</p>
-        <p>Detalhes da sua solicitação:</p>
-        <ul>
-          <li>Cidade: ${lead.cidade}</li>
-          <li>Tipo de Acomodação: ${lead.tipo_acomodacao}</li>
-          <li>Data de Chegada: ${lead.data_chegada}</li>
-          <li>Duração: ${lead.duracao}</li>
-        </ul>
-        <p>Se tiver alguma dúvida, não hesite em nos contatar.</p>
-        <p>Atenciosamente,<br>Equipe AcomodaFácil</p>
+        <h1>Reserva Confirmada!</h1>
+        <p>Sua reserva foi confirmada com sucesso.</p>
+        <p><strong>Check-in:</strong> ${reservation.data_checkin}</p>
+        <p><strong>Check-out:</strong> ${reservation.data_checkout}</p>
+        <p>Entraremos em contato em breve com mais informações.</p>
       `,
     })
 
@@ -56,4 +51,25 @@ export const sendLeadConfirmation = async (lead: any) => {
     console.error('Erro ao enviar email:', error)
     return { success: false, error }
   }
-} 
+}
+
+export const sendReservationCancellation = async (reservation: Reservation) => {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: 'AcomodaFácil <noreply@acomodafacil.com>',
+      to: [reservation.email],
+      subject: 'Cancelamento de Reserva - AcomodaFácil',
+      html: `
+        <h1>Reserva Cancelada</h1>
+        <p>Sua reserva foi cancelada conforme solicitado.</p>
+        <p>Se precisar de ajuda para fazer uma nova reserva, entre em contato conosco.</p>
+      `,
+    })
+
+    if (error) throw error
+    return { success: true }
+  } catch (error) {
+    console.error('Erro ao enviar email:', error)
+    return { success: false, error }
+  }
+}
