@@ -48,17 +48,8 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative bg-sand-50 text-graphite-400 overflow-hidden">
-        <div className="absolute inset-0 z-0 overflow-hidden" style={{ transform: isMounted ? `translateY(${offsetY * 0.2}px)` : 'none' }}>
-          <Image
-            src="/images/hero-home.png"
-            alt="Estudantes em Dublin"
-            fill
-            className="object-cover opacity-20"
-            priority
-          />
-        </div>
-        <div className="container relative z-10 px-4 py-24 md:py-32 lg:py-40">
+      <section className="relative bg-white text-graphite-400">
+        <div className="container px-4 py-24 md:py-32 lg:py-40">
           <div className="grid gap-12 md:grid-cols-2 md:gap-16 items-center">
             <div className="space-y-8 animate-slideUp">
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
