@@ -5,18 +5,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Menu, X, ChevronDown } from "lucide-react"
-import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
 
-const navigation = [
-  { name: 'Home', href: '/home' },
-  { name: 'Como Funciona', href: '/como-funciona' },
-  { name: 'Destinos', href: '/destinos/dublin' }, // Exemplo de destino padrão
-  { name: 'Solicitar Acomodação', href: '/formulario' },
-]
-
-export function Navbar() {
-  const pathname = usePathname()
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isDestinationsOpen, setIsDestinationsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -48,20 +38,18 @@ export function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={cn(
-                'text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors',
-                pathname === item.href
-                  ? 'text-teal-500'
-                  : 'hover:text-teal-500'
-              )}
-            >
-              {item.name}
-            </Link>
-          ))}
+          <Link
+            href="/"
+            className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
+          >
+            Home
+          </Link>
+          <Link
+            href="/como-funciona"
+            className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
+          >
+            Como Funciona
+          </Link>
           <div className="relative">
             <button
               onClick={() => setIsDestinationsOpen(!isDestinationsOpen)}
@@ -101,10 +89,22 @@ export function Navbar() {
             )}
           </div>
           <Link
-            href="/formulario"
+            href="/cotacao"
             className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
           >
-            Solicitar Acomodação
+            Cotação
+          </Link>
+          <Link
+            href="/quem-somos"
+            className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
+          >
+            Quem Somos
+          </Link>
+          <Link
+            href="/depoimentos"
+            className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
+          >
+            Depoimentos
           </Link>
         </nav>
 
@@ -131,16 +131,16 @@ export function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden border-t animate-slideUp">
           <div className="container px-4 py-3 flex flex-col gap-3">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="py-2 text-sm font-medium text-graphite-400"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
+            <Link href="/" className="py-2 text-sm font-medium text-graphite-400" onClick={() => setIsMenuOpen(false)}>
+              Home
+            </Link>
+            <Link
+              href="/como-funciona"
+              className="py-2 text-sm font-medium text-graphite-400"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Como Funciona
+            </Link>
             <button
               onClick={() => setIsDestinationsOpen(!isDestinationsOpen)}
               className="flex items-center justify-between py-2 text-sm font-medium text-graphite-400"
@@ -183,11 +183,25 @@ export function Navbar() {
               </div>
             )}
             <Link
-              href="/formulario"
+              href="/cotacao"
               className="py-2 text-sm font-medium text-graphite-400"
               onClick={() => setIsMenuOpen(false)}
             >
-              Solicitar Acomodação
+              Cotação
+            </Link>
+            <Link
+              href="/quem-somos"
+              className="py-2 text-sm font-medium text-graphite-400"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Quem Somos
+            </Link>
+            <Link
+              href="/depoimentos"
+              className="py-2 text-sm font-medium text-graphite-400"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Depoimentos
             </Link>
             <div className="flex flex-col gap-2 pt-2">
               <Button asChild variant="outline" className="w-full border-teal-500 text-teal-500 hover:bg-teal-50">

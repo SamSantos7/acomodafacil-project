@@ -113,12 +113,6 @@ const config = {
           800: "#0F0F0F",
           900: "#080808",
         },
-        premium: {
-          white: '#FFFFFF',
-          graphite: '#2C2C2C',
-          beige: '#F5F1EA',
-          gold: '#D4B98C',
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -152,8 +146,6 @@ const config = {
       fontFamily: {
         sans: ["var(--font-poppins)", "sans-serif"],
         serif: ["var(--font-playfair)", "serif"],
-        inter: ['var(--font-inter)'],
-        playfair: ['var(--font-playfair)'],
       },
     },
   },
