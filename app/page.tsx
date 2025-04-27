@@ -18,10 +18,14 @@ export default function Home() {
 
   // Parallax effect
   const [offsetY, setOffsetY] = useState(0)
-  const handleScroll = () => setOffsetY(window.pageYOffset)
-
+  
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
+    const handleScroll = () => {
+      setOffsetY(window.scrollY)
+    }
+    
+    handleScroll() // Initial position
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -43,7 +47,7 @@ export default function Home() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section className="relative bg-sand-50 text-graphite-400 overflow-hidden">
-        <div className="absolute inset-0 z-0 overflow-hidden" style={{ transform: `translateY(${offsetY * 0.2}px)` }}>
+        <div className="absolute inset-0 z-0 overflow-hidden" style={{ transform: typeof window !== 'undefined' ? `translateY(${offsetY * 0.2}px)` : 'none' }}>
           <Image
             src="/images/hero-home.png"
             alt="Estudantes em Dublin"
