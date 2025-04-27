@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
 import { Menu, X, ChevronDown } from "lucide-react"
 
 export default function Navbar() {
@@ -44,12 +43,6 @@ export default function Navbar() {
           >
             Home
           </Link>
-          <Link
-            href="/como-funciona"
-            className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
-          >
-            Como Funciona
-          </Link>
           <div className="relative">
             <button
               onClick={() => setIsDestinationsOpen(!isDestinationsOpen)}
@@ -89,10 +82,10 @@ export default function Navbar() {
             )}
           </div>
           <Link
-            href="/cotacao"
+            href="/acomodacoes"
             className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
           >
-            Cotação
+            Acomodações
           </Link>
           <Link
             href="/quem-somos"
@@ -100,26 +93,9 @@ export default function Navbar() {
           >
             Quem Somos
           </Link>
-          <Link
-            href="/depoimentos"
-            className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
-          >
-            Depoimentos
-          </Link>
         </nav>
 
-        <div className="hidden md:flex items-center gap-4">
-          <Button
-            asChild
-            variant="outline"
-            className="border-teal-500 text-teal-500 hover:bg-teal-50 transition-all duration-300"
-          >
-            <Link href="/contato">Fale com um especialista</Link>
-          </Button>
-          <Button asChild className="bg-teal-500 hover:bg-teal-600 text-white transition-all duration-300">
-            <Link href="/cotacao">Receba uma Cotação</Link>
-          </Button>
-        </div>
+        <div className="hidden md:flex items-center gap-4">{/* Botões removidos */}</div>
 
         {/* Mobile Menu Button */}
         <button className="md:hidden text-graphite-400" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -133,13 +109,6 @@ export default function Navbar() {
           <div className="container px-4 py-3 flex flex-col gap-3">
             <Link href="/" className="py-2 text-sm font-medium text-graphite-400" onClick={() => setIsMenuOpen(false)}>
               Home
-            </Link>
-            <Link
-              href="/como-funciona"
-              className="py-2 text-sm font-medium text-graphite-400"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Como Funciona
             </Link>
             <button
               onClick={() => setIsDestinationsOpen(!isDestinationsOpen)}
@@ -183,11 +152,11 @@ export default function Navbar() {
               </div>
             )}
             <Link
-              href="/cotacao"
+              href="/acomodacoes"
               className="py-2 text-sm font-medium text-graphite-400"
               onClick={() => setIsMenuOpen(false)}
             >
-              Cotação
+              Acomodações
             </Link>
             <Link
               href="/quem-somos"
@@ -196,25 +165,7 @@ export default function Navbar() {
             >
               Quem Somos
             </Link>
-            <Link
-              href="/depoimentos"
-              className="py-2 text-sm font-medium text-graphite-400"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Depoimentos
-            </Link>
-            <div className="flex flex-col gap-2 pt-2">
-              <Button asChild variant="outline" className="w-full border-teal-500 text-teal-500 hover:bg-teal-50">
-                <Link href="/contato" onClick={() => setIsMenuOpen(false)}>
-                  Fale com um especialista
-                </Link>
-              </Button>
-              <Button asChild className="w-full bg-teal-500 hover:bg-teal-600 text-white">
-                <Link href="/cotacao" onClick={() => setIsMenuOpen(false)}>
-                  Receba uma Cotação
-                </Link>
-              </Button>
-            </div>
+            <div className="flex flex-col gap-2 pt-2">{/* Botões removidos */}</div>
           </div>
         </div>
       )}

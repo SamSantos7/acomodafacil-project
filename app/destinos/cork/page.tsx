@@ -6,6 +6,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { MapPin, Home, Building, Users, ArrowRight } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 
 export default function Cork() {
   // Parallax effect
@@ -37,7 +38,7 @@ export default function Cork() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="bg-teal-500 hover:bg-teal-600 text-white">
-                  <Link href="/cotacao">Receba uma Cotação</Link>
+                  <Link href="/acomodacoes">Ver Acomodações</Link>
                 </Button>
               </div>
             </div>
@@ -178,6 +179,86 @@ export default function Cork() {
         </div>
       </section>
 
+      {/* Acomodações Disponíveis */}
+      <section className="bg-white py-20 md:py-28">
+        <div className="container px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-graphite-400 mb-4">
+              Acomodações Disponíveis em Cork
+            </h2>
+            <p className="max-w-[700px] mx-auto text-graphite-300 md:text-lg">
+              Confira algumas das nossas opções de acomodação em Cork
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {/* Acomodação 1 */}
+            <Card className="overflow-hidden border-none shadow-xl card-hover">
+              <div className="relative h-[200px]">
+                <Image
+                  src="/images/apartment-living.png"
+                  alt="Estúdio Individual - Cork"
+                  fill
+                  className="object-cover"
+                />
+                <Badge className="absolute top-3 left-3 bg-white text-graphite-400">Estúdio Individual</Badge>
+              </div>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-bold text-graphite-400">Estúdio Individual - Cork</h3>
+                  <span className="text-lg font-bold text-teal-500">€1050/mês</span>
+                </div>
+                <div className="flex items-center gap-1 text-sm text-graphite-300 mb-4">
+                  <MapPin className="h-4 w-4" />
+                  <span>22 Washington Street, Cork</span>
+                </div>
+                <p className="text-graphite-300 text-sm mb-4 line-clamp-2">
+                  Estúdio moderno e independente no centro de Cork, ideal para quem busca privacidade.
+                </p>
+                <Button asChild className="w-full bg-teal-500 hover:bg-teal-600 text-white">
+                  <Link href="/acomodacoes">Ver Detalhes</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Acomodação 2 */}
+            <Card className="overflow-hidden border-none shadow-xl card-hover">
+              <div className="relative h-[200px]">
+                <Image
+                  src="/images/student-residence.png"
+                  alt="Residência Premium - Cork"
+                  fill
+                  className="object-cover"
+                />
+                <Badge className="absolute top-3 left-3 bg-white text-graphite-400">Residência Estudantil</Badge>
+              </div>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-bold text-graphite-400">Residência Premium - Cork</h3>
+                  <span className="text-lg font-bold text-teal-500">€1100/mês</span>
+                </div>
+                <div className="flex items-center gap-1 text-sm text-graphite-300 mb-4">
+                  <MapPin className="h-4 w-4" />
+                  <span>University College Cork, College Road</span>
+                </div>
+                <p className="text-graphite-300 text-sm mb-4 line-clamp-2">
+                  Residência de alto padrão próxima à University College Cork, com instalações modernas.
+                </p>
+                <Button asChild className="w-full bg-teal-500 hover:bg-teal-600 text-white">
+                  <Link href="/acomodacoes">Ver Detalhes</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-12 text-center">
+            <Button asChild className="bg-teal-500 hover:bg-teal-600 text-white">
+              <Link href="/acomodacoes">Ver Todas as Acomodações em Cork</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Dicas */}
       <section className="bg-white py-20 md:py-28">
         <div className="container px-4">
@@ -242,8 +323,8 @@ export default function Cork() {
             Preencha nosso formulário de cotação e receba as melhores opções para sua estadia em Cork.
           </p>
           <Button asChild size="lg" className="bg-white text-teal-500 hover:bg-sand-100 transition-colors">
-            <Link href="/cotacao" className="flex items-center gap-2">
-              Receba uma Cotação <ArrowRight className="h-5 w-5" />
+            <Link href="/acomodacoes" className="flex items-center gap-2">
+              Ver Acomodações <ArrowRight className="h-5 w-5" />
             </Link>
           </Button>
         </div>

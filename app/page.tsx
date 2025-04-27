@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckCircle, MapPin, Star, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import TestimonialCard from "@/components/testimonial-card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
 
 export default function Home() {
   const [activeSlide, setActiveSlide] = useState(0)
@@ -63,10 +65,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="bg-teal-500 hover:bg-teal-600 text-white">
-                  <Link href="/cotacao">Receba uma Cotação</Link>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="border-teal-500 text-teal-500 hover:bg-teal-50">
-                  <Link href="/como-funciona">Como Funciona</Link>
+                  <Link href="/acomodacoes">Ver Acomodações</Link>
                 </Button>
               </div>
               <div className="flex items-center gap-2 text-sm">
@@ -92,63 +91,125 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Como Funciona Section */}
+      {/* Search Box Section */}
       <section className="bg-white py-20 md:py-28">
         <div className="container px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-graphite-400 mb-4">
-              Encontre a acomodação ideal em 3 passos
+              Encontre a acomodação ideal
             </h2>
             <p className="max-w-[700px] mx-auto text-graphite-300 md:text-lg">
-              Acomodações selecionadas por especialistas, com suporte local e atendimento em português desde o primeiro
-              contato.
+              Utilize os filtros abaixo para encontrar a acomodação perfeita para sua estadia na Irlanda
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
-            <Card className="border-none shadow-xl card-hover bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-sand-100 text-teal-500">
-                  <span className="text-3xl font-bold">1</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-3 text-graphite-400">Preencha o Formulário</h3>
-                <p className="text-graphite-300">Você preenche o formulário com seu perfil e destino</p>
-              </CardContent>
-            </Card>
+          <div className="max-w-5xl mx-auto">
+            <Card className="border-none shadow-xl">
+              <CardContent className="p-8">
+                <form className="space-y-6">
+                  <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+                    <div className="space-y-2">
+                      <label htmlFor="destino" className="text-sm font-medium text-graphite-400">
+                        Destino
+                      </label>
+                      <Select>
+                        <SelectTrigger id="destino" className="border-sand-200 focus:ring-teal-500">
+                          <SelectValue placeholder="Selecione o destino" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="dublin">Dublin</SelectItem>
+                          <SelectItem value="cork">Cork</SelectItem>
+                          <SelectItem value="galway">Galway</SelectItem>
+                          <SelectItem value="limerick">Limerick</SelectItem>
+                          <SelectItem value="waterford">Waterford</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-            <Card className="border-none shadow-xl card-hover bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-sand-100 text-teal-500">
-                  <span className="text-3xl font-bold">2</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-3 text-graphite-400">Receba Opções</h3>
-                <p className="text-graphite-300">A gente busca as melhores opções com nossos parceiros locais</p>
-              </CardContent>
-            </Card>
+                    <div className="space-y-2">
+                      <label htmlFor="tipo" className="text-sm font-medium text-graphite-400">
+                        Tipo de Acomodação
+                      </label>
+                      <Select>
+                        <SelectTrigger id="tipo" className="border-sand-200 focus:ring-teal-500">
+                          <SelectValue placeholder="Selecione o tipo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="homestay">Homestay</SelectItem>
+                          <SelectItem value="residencia">Residência Estudantil</SelectItem>
+                          <SelectItem value="compartilhado">Apartamento Compartilhado</SelectItem>
+                          <SelectItem value="privativo">Apartamento Privativo</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-            <Card className="border-none shadow-xl card-hover bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-sand-100 text-teal-500">
-                  <span className="text-3xl font-bold">3</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-3 text-graphite-400">Viaje Tranquilo</h3>
-                <p className="text-graphite-300">Você escolhe, confirma e viaja com tudo resolvido</p>
+                    <div className="space-y-2">
+                      <label htmlFor="semanas" className="text-sm font-medium text-graphite-400">
+                        Quantidade de Semanas
+                      </label>
+                      <Select>
+                        <SelectTrigger id="semanas" className="border-sand-200 focus:ring-teal-500">
+                          <SelectValue placeholder="Selecione" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 52 }, (_, i) => (
+                            <SelectItem key={i + 1} value={(i + 1).toString()}>
+                              {i + 1} {i + 1 === 1 ? "semana" : "semanas"}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="data" className="text-sm font-medium text-graphite-400">
+                        Data de Início
+                      </label>
+                      <Input
+                        id="data"
+                        type="date"
+                        className="border-sand-200 focus:border-teal-500 focus:ring-teal-500"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="pessoas" className="text-sm font-medium text-graphite-400">
+                        Quantidade de Pessoas
+                      </label>
+                      <Select>
+                        <SelectTrigger id="pessoas" className="border-sand-200 focus:ring-teal-500">
+                          <SelectValue placeholder="Selecione" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">1 pessoa</SelectItem>
+                          <SelectItem value="2">2 pessoas</SelectItem>
+                          <SelectItem value="3">3 pessoas</SelectItem>
+                          <SelectItem value="4">4 pessoas</SelectItem>
+                          <SelectItem value="5+">5 ou mais pessoas</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="flex items-end">
+                      <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-600 text-white">
+                        Buscar
+                      </Button>
+                    </div>
+                  </div>
+                </form>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* Curadoria Personalizada Section */}
+      {/* Acomodações Populares Section */}
       <section className="bg-sand-50 py-20 md:py-28">
         <div className="container px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-graphite-400 mb-4">
-              Recomendação Personalizada
-            </h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-graphite-400 mb-4">Acomodações Populares</h2>
             <p className="max-w-[700px] mx-auto text-graphite-300 md:text-lg">
-              Cada acomodação que oferecemos é escolhida com cuidado, para que sua experiência no exterior comece com
-              conforto e tranquilidade.
+              Conheça as acomodações mais procuradas pelos estudantes brasileiros na Irlanda
             </p>
           </div>
 
@@ -213,7 +274,7 @@ export default function Home() {
                         ))}
                       </ul>
                       <Button asChild className="w-full mt-6 bg-teal-500 hover:bg-teal-600 text-white">
-                        <Link href="/cotacao">Receba uma Cotação</Link>
+                        <Link href="/acomodacoes">Ver Detalhes</Link>
                       </Button>
                     </CardContent>
                   </Card>
@@ -418,7 +479,7 @@ export default function Home() {
             Com a gente, você chega com endereço certo.
           </h2>
           <Button asChild size="lg" className="bg-white text-teal-500 hover:bg-sand-100 transition-colors">
-            <Link href="/cotacao">Quero descobrir minha próxima casa</Link>
+            <Link href="/acomodacoes">Encontre a acomodação ideal</Link>
           </Button>
         </div>
       </section>

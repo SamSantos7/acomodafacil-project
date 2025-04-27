@@ -164,8 +164,8 @@ export default function Destinos() {
             Preencha nosso formulário de cotação e receba as melhores opções para sua estadia na Irlanda.
           </p>
           <Button asChild size="lg" className="bg-white text-teal-500 hover:bg-sand-100 transition-colors">
-            <Link href="/cotacao" className="flex items-center gap-2">
-              Receba uma Cotação <ArrowRight className="h-5 w-5" />
+            <Link href="/acomodacoes" className="flex items-center gap-2">
+              Ver Acomodações <ArrowRight className="h-5 w-5" />
             </Link>
           </Button>
         </div>

@@ -51,14 +51,6 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/como-funciona"
-                  className="text-gray-300 hover:text-white transition-colors hover-underline inline-block"
-                >
-                  Como Funciona
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/destinos"
                   className="text-gray-300 hover:text-white transition-colors hover-underline inline-block"
                 >
@@ -67,10 +59,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/cotacao"
+                  href="/acomodacoes"
                   className="text-gray-300 hover:text-white transition-colors hover-underline inline-block"
                 >
-                  Solicitar Cotação
+                  Acomodações
                 </Link>
               </li>
               <li>
@@ -79,14 +71,6 @@ export default function Footer() {
                   className="text-gray-300 hover:text-white transition-colors hover-underline inline-block"
                 >
                   Quem Somos
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/depoimentos"
-                  className="text-gray-300 hover:text-white transition-colors hover-underline inline-block"
-                >
-                  Depoimentos
                 </Link>
               </li>
             </ul>
