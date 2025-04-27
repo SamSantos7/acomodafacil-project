@@ -1,22 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  output: 'standalone',
   typescript: {
     ignoreBuildErrors: true,
   },
-  output: 'standalone',
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack: (config) => {
     config.watchOptions = {
       poll: 1000,
       aggregateTimeout: 300,
     }
     return config
-  },
-  webServer: {
-    hostname: '0.0.0.0',
-    port: 3000
   },
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -33,4 +29,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default nextConfig;
