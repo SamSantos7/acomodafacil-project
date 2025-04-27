@@ -6,6 +6,14 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  output: 'standalone',
+  webpack: (config) => {
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300,
+    }
+    return config
+  },
   webServer: {
     hostname: '0.0.0.0',
     port: 3000
