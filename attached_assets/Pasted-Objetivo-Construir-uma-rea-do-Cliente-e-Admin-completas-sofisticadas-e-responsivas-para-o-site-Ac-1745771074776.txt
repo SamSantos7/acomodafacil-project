@@ -1,0 +1,152 @@
+Objetivo:
+Construir uma Área do Cliente e Admin completas, sofisticadas e responsivas para o site AcomodaFácil, com padrão de luxo premium.
+
+1. Estrutura de Rotas:
+/login: Página de login do cliente.
+
+/cadastro: Página de cadastro do cliente.
+
+/cliente/dashboard: Painel do Cliente (área logada).
+
+/admin/dashboard: Painel Administrativo.
+
+2. Funcionalidades na Área do Cliente:
+✅ Login e Cadastro de Cliente:
+
+Campos obrigatórios:
+
+Nome completo
+
+Data de nascimento
+
+E-mail
+
+Senha (mínimo 8 caracteres com número)
+
+Instituição de Ensino
+
+Data de Viagem
+
+Cidade
+
+Estado
+
+Número de contato (WhatsApp)
+
+✅ Painel do Cliente:
+
+Mensagem de boas-vindas personalizada: "Bem-vindo de volta, [Nome]!"
+
+Visualização do histórico de solicitações de reserva.
+
+Exibição do status da reserva:
+
+Aguardando Disponibilidade
+
+Aprovar Opções Disponíveis
+
+Reservado
+
+Contador de dias restantes para a viagem (baseado na data de chegada).
+
+Opção para alterar dados pessoais.
+
+Opção para alterar ou cancelar uma reserva.
+
+Área de upload e download de documentos:
+
+Cliente pode enviar documentos relacionados à acomodação.
+
+Cliente pode baixar documentos enviados pelo Admin.
+
+Notificações internas para o cliente sobre novos status e documentos.
+
+3. Funcionalidades na Área Admin:
+✅ Painel Administrativo:
+
+Listagem de todos os clientes e reservas.
+
+Visualizar, editar ou cancelar reservas.
+
+Atualizar o status da reserva (Aguardando Disponibilidade, Aprovar Opções, Reservado).
+
+Upload de documentos para cada cliente.
+
+Download de documentos enviados pelos clientes.
+
+Notificações internas para o Admin quando o cliente enviar documento ou atualizar dados.
+
+4. Banco de Dados (Supabase):
+Tabela usuarios
+
+Tabela reservas
+
+Tabela documentos com os campos:
+
+ID
+
+ID do Cliente
+
+Tipo de Documento
+
+Link para Download
+
+Data de Upload
+
+5. Comunicação de Notificações:
+✅ Integração de WhatsApp (Webhook ou API de terceiros):
+
+Enviar notificação ao cliente via WhatsApp:
+
+Quando um novo documento for disponibilizado.
+
+Quando houver alteração no status da reserva.
+
+Quando receber uma nova mensagem do Admin.
+
+Enviar notificação ao Admin via WhatsApp:
+
+Quando o cliente enviar um novo documento.
+
+Quando o cliente solicitar alteração ou cancelamento de reserva.
+
+6. Melhorias Visuais e Funcionais:
+✅ Imagens obrigatórias:
+
+Todas as acomodações precisam ter pelo menos 1 imagem.
+
+Todos os destinos precisam ter imagens (ou usar placeholder bonito).
+
+✅ Estilo visual:
+
+Manter design de luxo premium, elegante, limpo, profissional.
+
+✅ Responsividade Completa:
+
+Ajustar o site para:
+
+Todos os modelos de celular (iPhone, Android, etc.)
+
+Todos os tamanhos de notebooks
+
+Computadores e desktops
+
+Garantir que:
+
+Todos os formulários sejam responsivos.
+
+O formulário inteiro seja visível em telas menores.
+
+Possibilitar rolagem (scroll) adequada nos formulários e em todas as seções quando necessário.
+
+Nenhum botão ou campo fique cortado em nenhuma tela.
+
+✅ Correções Específicas:
+
+Corrigir problemas de rolagem nos formulários em telas de notebook.
+
+Garantir altura mínima (min-height) em containers de formulário para adaptação automática.
+
+7. Segurança:
+✅ Hash de senha no cadastro (nunca armazenar senha em texto puro).
+✅ Proteção de rota para /cliente/dashboard e /admin/dashboard (somente logados acessam).
