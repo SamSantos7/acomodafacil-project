@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useEffect, useState } from "react"
@@ -11,25 +10,38 @@ export default function ClienteDashboard() {
   const [user, setUser] = useState<any>(null)
   const [reservas, setReservas] = useState([])
   const [diasRestantes, setDiasRestantes] = useState(0)
+  const [dataViagem, setDataViagem] = useState(null); // Added state for travel date
 
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
-      
+
       // Buscar reservas do usuário
       if (user) {
         const { data } = await supabase
           .from('reservas')
           .select('*')
           .eq('user_id', user.id)
-        
-        if (data) setReservas(data)
+
+        if (data && data.length > 0) {
+          setReservas(data)
+          setDataViagem(new Date(data[0].data_viagem)); // Assuming 'data_viagem' field exists
+        }
       }
     }
 
     getUser()
   }, [])
+
+  useEffect(() => {
+    if (dataViagem) {
+      const hoje = new Date()
+      const diferenca = dataViagem.getTime() - hoje.getTime()
+      const dias = Math.ceil(diferenca / (1000 * 3600 * 24))
+      setDiasRestantes(dias)
+    }
+  }, [dataViagem])
 
   return (
     <div className="container px-4 py-8">
@@ -46,7 +58,10 @@ export default function ClienteDashboard() {
             <Calendar className="h-4 w-4 text-teal-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{diasRestantes} dias</div>
+            <div className="text-2xl font-bold">
+              {diasRestantes >= 0 ? `${diasRestantes} dias` : "Data de viagem já passou!"}
+            </div>
+             {dataViagem && <p>Data prevista: {dataViagem.toLocaleDateString('pt-BR')}</p>}
           </CardContent>
         </Card>
 
