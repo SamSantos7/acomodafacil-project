@@ -110,7 +110,7 @@ export default function ComoFunciona() {
 
           <div className="mt-16 text-center">
             <Button asChild size="lg" className="bg-teal-500 hover:bg-teal-600 text-white">
-              <Link href="/cotacao">Receba uma Cotação</Link>
+              <Link href="/acomodacoes">Ver Acomodações</Link>
             </Button>
           </div>
         </div>

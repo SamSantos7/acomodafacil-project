@@ -350,7 +350,7 @@ export default function Dublin() {
             Pronto para encontrar sua acomodação em Dublin?
           </h2>
           <p className="max-w-[700px] mx-auto text-white/90 mb-8 md:text-xl">
-            Preencha nosso formulário de cotação e receba as melhores opções para sua estadia em Dublin.
+            Explore nossas opções de acomodação disponíveis em Dublin.
           </p>
           <Button asChild size="lg" className="bg-white text-teal-500 hover:bg-sand-100 transition-colors">
             <Link href="/acomodacoes" className="flex items-center gap-2">

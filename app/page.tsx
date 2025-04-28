@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useEffect, useRef, useState } from "react"
@@ -19,13 +18,13 @@ export default function Home() {
   // Parallax effect
   const [offsetY, setOffsetY] = useState(0)
   const [isMounted, setIsMounted] = useState(false)
-  
+
   useEffect(() => {
     setIsMounted(true)
     const handleScroll = () => {
       setOffsetY(window.scrollY)
     }
-    
+
     handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
