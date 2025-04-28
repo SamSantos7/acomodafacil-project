@@ -10,10 +10,21 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
-  // Se tentar acessar área admin sem estar logado
+  // Se tentar acessar área admin
   if (req.nextUrl.pathname.startsWith('/admin')) {
     if (!session) {
       return NextResponse.redirect(new URL('/auth', req.url))
+    }
+    // Verificar se é admin
+    if (session.user.user_metadata?.role !== 'admin') {
+      return NextResponse.redirect(new URL('/', req.url))
+    }
+  }
+
+  // Se tentar acessar área cliente
+  if (req.nextUrl.pathname.startsWith('/cliente')) {
+    if (!session) {
+      return NextResponse.redirect(new URL('/login', req.url))
     }
   }
 
