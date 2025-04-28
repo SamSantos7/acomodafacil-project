@@ -31,7 +31,7 @@ export const Navbar = () => {
     >
       <div className="container flex h-20 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt="AcomodaFácil Logo" width={48} height={48} className="h-12 w-12" priority />
+          <Image src="/placeholder-logo.png" alt="AcomodaFácil Logo" width={48} height={48} className="h-12 w-12" priority />
           <span className="text-xl font-medium text-teal-500 ml-2">AcomodaFácil</span>
         </Link>
 
