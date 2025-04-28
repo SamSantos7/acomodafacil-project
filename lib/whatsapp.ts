@@ -1,7 +1,7 @@
 export const sendWhatsAppMessage = async (to: string, message: string) => {
   try {
     const response = await fetch(
-      `https://graph.facebook.com/v17.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
+      `https://graph.facebook.com/v17.0/5521970286372/messages`,
       {
         method: 'POST',
         headers: {

@@ -1,7 +1,7 @@
 export function WhatsappButton() {
   return (
     <a
-      href="https://wa.me/5511999999999" // Substitua pelo número correto
+      href="https://wa.me/5521970286372"
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 bg-green-500 text-white rounded-full p-4 shadow-lg hover:bg-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"

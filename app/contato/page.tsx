@@ -196,7 +196,7 @@ export default function Contato() {
                       </p>
                       <Button asChild className="w-full bg-teal-500 hover:bg-teal-600 text-white">
                         <Link
-                          href="https://wa.me/5511987654321"
+                          href="https://wa.me/5521970286372"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center justify-center gap-2"
