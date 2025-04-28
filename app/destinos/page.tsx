@@ -70,6 +70,7 @@ export default function Destinos() {
             src="/images/ireland-map.png"
             alt="Mapa da Irlanda"
             fill
+            sizes="100vw"
             className="object-cover opacity-10"
             priority
           />
@@ -95,7 +96,13 @@ export default function Destinos() {
                 className={`grid gap-8 md:grid-cols-2 items-center ${index % 2 !== 0 ? "md:flex-row-reverse" : ""}`}
               >
                 <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden shadow-xl">
-                  <Image src={destino.image || "/placeholder.svg"} alt={destino.name} fill className="object-cover" />
+                  <Image 
+                    src={destino.image || "/placeholder.svg"} 
+                    alt={destino.name} 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover" 
+                  />
                 </div>
                 <div className="space-y-6">
                   <div>
