@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   title: "AcomodaFácil - Seu lar no intercâmbio começa aqui",
   description: "Descubra acomodações estudantis selecionadas especialmente para você. AcomodaFácil: Seu lar no intercâmbio começa aqui.",
   icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-icon.png',
+    icon: '/images/logo.png',
+    apple: '/images/logo.png',
   },
 }
 
