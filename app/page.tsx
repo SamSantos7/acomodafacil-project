@@ -442,7 +442,7 @@ export default function Home() {
 
               <div className="mt-10">
                 <Button asChild className="bg-teal-500 hover:bg-teal-600 text-white">
-                  <Link href="/quem-somos">Conheça Nossa Equipe</Link>
+                  <Link href="/quem-somos">Sobre Nós</Link>
                 </Button>
               </div>
             </div>
