@@ -26,4 +26,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "pnpm run dev -- -H 0.0.0.0 -p 3000"
+args = "pnpm run dev -H 0.0.0.0 -p 3000"
