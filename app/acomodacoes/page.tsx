@@ -49,7 +49,36 @@ export default function AcomodacoesPage() {
 
   useEffect(() => {
     const buscarAcomodacoes = async () => {
-      let query = supabase.from("acomodacoes").select("*").range((page - 1) * itemsPerPage, (page -1) * itemsPerPage + itemsPerPage -1);
+      // Temporariamente usando dados mockados até integrar com Supabase
+      setAcomodacoes([
+        {
+          id: "0",
+          titulo: "Apartamento Teste",
+          tipo: "Apartamento",
+          cidade: "Galway",
+          preco: 150,
+          imagens: ["/images/shared-apartment.png"]
+        },
+        {
+          id: "1",
+          titulo: "Residência Estudantil Central",
+          tipo: "Residência Estudantil",
+          cidade: "Dublin",
+          preco: 195,
+          imagens: ["/images/student-residence.png"]
+        },
+        {
+          id: "2",
+          titulo: "Casa de Família em Galway",
+          tipo: "Casa de Família",
+          cidade: "Galway",
+          preco: 210,
+          imagens: ["/images/homestay.png"]
+        }
+      ]);
+      setTotalCount(3);
+      setLoading(false);
+    };
       
       // Aplicar filtros da busca
       if (searchParams.get("destino")) {
