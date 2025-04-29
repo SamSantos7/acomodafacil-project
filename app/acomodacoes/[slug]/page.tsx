@@ -579,12 +579,23 @@ export default function AccommodationDetail({ params }: { params: { slug: string
                   <div>
                     <h3 className="text-xl font-semibold mb-4">Características</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {accommodation.features.map((feature, index) => (
-                        <div key={index} className="flex items-start gap-2">
-                          <CheckCircle className="h-5 w-5 text-teal-500 flex-shrink-0 mt-0.5" />
-                          <span>{feature}</span>
-                        </div>
-                      ))}
+                      {accommodation.features.map((feature, index) => {
+                        const getFeatureIcon = (feature: string) => {
+                          if (feature.toLowerCase().includes('quarto')) return <Bed className="h-5 w-5" />
+                          if (feature.toLowerCase().includes('banheiro')) return <Bath className="h-5 w-5" />
+                          if (feature.toLowerCase().includes('cozinha')) return <Utensils className="h-5 w-5" />
+                          if (feature.toLowerCase().includes('wifi') || feature.toLowerCase().includes('internet')) return <Wifi className="h-5 w-5" />
+                          return <CheckCircle className="h-5 w-5" />
+                        }
+                        return (
+                          <div key={index} className="flex items-start gap-2">
+                            <div className="text-teal-500 flex-shrink-0 mt-0.5">
+                              {getFeatureIcon(feature)}
+                            </div>
+                            <span>{feature}</span>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
 

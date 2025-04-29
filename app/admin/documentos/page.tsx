@@ -164,13 +164,30 @@ export default function AdminDocumentosPage() {
                           {new Date(doc.created_at).toLocaleDateString()}
                         </p>
                       </div>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => baixarDocumento(doc.caminho, doc.nome)}
-                      >
-                        <FileDown className="w-4 h-4" />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => baixarDocumento(doc.caminho, doc.nome)}
+                        >
+                          <FileDown className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => marcarComoRevisado(doc.id)}
+                          className={doc.revisado ? "bg-teal-100" : ""}
+                        >
+                          <CheckSquare className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => adicionarComentario(doc.id)}
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
               </div>

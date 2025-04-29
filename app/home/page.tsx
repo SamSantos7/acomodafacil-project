@@ -85,7 +85,10 @@ export default function HomePage() {
           </div>
 
           <div className="flex items-end">
-            <Button type="submit" className="w-full bg-teal-600 hover:bg-teal-700">
+            <Button 
+              type="submit" 
+              className="w-full bg-teal-600 hover:bg-teal-700 transform hover:scale-[1.02] transition-all duration-200"
+            >
               Buscar
             </Button>
           </div>

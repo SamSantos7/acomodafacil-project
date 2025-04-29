@@ -240,7 +240,7 @@ export default function AcomodacoesPage() {
             ) : (
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {acomodacoes.map((acomodacao) => (
-                  <Card key={acomodacao.id} className="overflow-hidden border-none shadow-xl card-hover">
+                  <Card key={acomodacao.id} className="overflow-hidden border-none shadow-xl card-hover flex flex-col">
                     <Link href={`/acomodacoes/${acomodacao.id}`}> {/* Assuming ID is used for slug */}
                       <div className="relative h-[200px]">
                         <img
@@ -250,7 +250,7 @@ export default function AcomodacoesPage() {
                         />
                         <Badge className="absolute top-3 left-3 bg-white text-graphite-400">{acomodacao.tipo}</Badge>
                       </div>
-                      <CardContent className="p-6">
+                      <CardContent className="p-6 flex flex-col h-full">
                         <div className="flex justify-between items-start mb-2">
                           <h3 className="text-xl font-bold text-graphite-400">{acomodacao.titulo}</h3>
                           <span className="text-lg font-bold text-teal-500">€{acomodacao.preco}/semana</span>

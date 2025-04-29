@@ -115,7 +115,12 @@ export default function ReservasCliente() {
                   </div>
 
                   <div className="flex gap-2 mt-4">
-                    <Button variant="outline" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="w-full flex items-center gap-2"
+                      onClick={() => router.push(`/cliente/reservas/${reserva.id}`)}
+                    >
+                      <Eye className="w-4 h-4" />
                       Ver Detalhes
                     </Button>
                     {reserva.status === 'pendente' && (
