@@ -29,6 +29,8 @@ export default function AcomodacoesPage() {
   const [loading, setLoading] = useState(true)
   // Parallax effect
   const [offsetY, setOffsetY] = useState(0)
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 9;
   const handleScroll = () => setOffsetY(window.pageYOffset)
 
   // Filtros
@@ -38,6 +40,7 @@ export default function AcomodacoesPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [showFilters, setShowFilters] = useState(false)
   const [sortBy, setSortBy] = useState("popular"); // Add sort state
+  const [totalCount, setTotalCount] = useState(0); // Add total count state
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -46,8 +49,8 @@ export default function AcomodacoesPage() {
 
   useEffect(() => {
     const buscarAcomodacoes = async () => {
-      let query = supabase.from("acomodacoes").select("*")
-
+      let query = supabase.from("acomodacoes").select("*").range((page - 1) * itemsPerPage, (page -1) * itemsPerPage + itemsPerPage -1);
+      
       // Aplicar filtros da busca
       if (searchParams.get("destino")) {
         query = query.ilike("cidade", `%${searchParams.get("destino")}%`)
@@ -55,17 +58,23 @@ export default function AcomodacoesPage() {
       if (searchParams.get("tipo")) {
         query = query.eq("tipo", searchParams.get("tipo"))
       }
+      if (sortBy === "price-asc") {
+        query = query.order("preco", {ascending: true});
+      } else if (sortBy === "price-desc") {
+        query = query.order("preco", {ascending: false});
+      }
 
-      const { data, error } = await query
+      const { data, error, count } = await query;
 
       if (data) {
         setAcomodacoes(data)
+        setTotalCount(count); // Set total count
       }
       setLoading(false)
     }
 
     buscarAcomodacoes()
-  }, [searchParams])
+  }, [searchParams, page, sortBy])
 
   const getAccommodationTypeIcon = (type: string) => {
     switch (type) {
@@ -228,7 +237,7 @@ export default function AcomodacoesPage() {
           {/* Resultados */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-graphite-400 mb-6">
-              {acomodacoes.length} acomodações encontradas
+              {totalCount} acomodações encontradas
             </h2>
 
             {acomodacoes.length === 0 ? (
@@ -247,6 +256,7 @@ export default function AcomodacoesPage() {
                           src={acomodacao.imagens.length > 0 ? acomodacao.imagens[0] : "/placeholder.svg"}
                           alt={acomodacao.titulo}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                         <Badge className="absolute top-3 left-3 bg-white text-graphite-400">{acomodacao.tipo}</Badge>
                       </div>
@@ -269,6 +279,11 @@ export default function AcomodacoesPage() {
                 ))}
               </div>
             )}
+          </div>
+          {/* Pagination */}
+          <div className="flex justify-center mt-4">
+            <Button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>Previous</Button>
+            <Button onClick={() => setPage(p => p + 1)} disabled={page * itemsPerPage >= totalCount}>Next</Button>
           </div>
         </div>
       </section>

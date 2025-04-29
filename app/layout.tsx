@@ -17,9 +17,14 @@ const playfairFont = Playfair_Display({
   preload: true,
 })
 import "./globals.css"
+import dynamic from 'next/dynamic'
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/navbar"
-import Footer from "@/components/footer"
+
+const Footer = dynamic(() => import("@/components/footer"), {
+  loading: () => <div className="h-[200px] bg-gray-50" />,
+  ssr: false
+})
 
 const poppins = Poppins({
   subsets: ["latin"],

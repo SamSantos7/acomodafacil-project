@@ -65,12 +65,17 @@ export async function createNotification(notification: Partial<Notification>) {
   return data
 }
 
-export async function getUserReservations(userId: string) {
+export async function getUserReservations(userId: string, page = 1, limit = 10) {
+  const start = (page - 1) * limit;
+  const end = start + limit - 1;
+  
   const { data, error } = await supabase
     .from('reservations')
-    .select('*, accommodations(*)')
+    .select('*, accommodations!inner(*)', { count: 'exact' })
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
+    .range(start, end)
+    .abortSignal(new AbortController().signal)
     
   if (error) throw error
   return data
