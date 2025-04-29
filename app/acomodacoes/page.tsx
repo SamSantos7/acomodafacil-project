@@ -11,19 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
-import {
-  MapPin,
-  Bed,
-  Search,
-  Filter,
-  CheckCircle,
-  Calendar,
-  ArrowRight,
-  Home,
-  Building,
-  Users,
-  Star,
-} from "lucide-react"
+import { MapPin, Bed, Search, Filter, CheckCircle, Calendar, ArrowRight, Home, Building, Users, Star, } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 
 interface Acomodacao {
@@ -49,7 +37,7 @@ export default function AcomodacoesPage() {
   const [priceRange, setPriceRange] = useState([150, 300])
   const [searchTerm, setSearchTerm] = useState("")
   const [showFilters, setShowFilters] = useState(false)
-
+  const [sortBy, setSortBy] = useState("popular"); // Add sort state
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -99,7 +87,7 @@ export default function AcomodacoesPage() {
     let params = new URLSearchParams();
     if (activeCity !== 'all') params.set('destino', activeCity);
     if (activeType !== 'all') params.set('tipo', activeType);
-    // Add price range and searchTerm handling if needed
+    params.set('sortBy', sortBy); // Add sortBy to params
     window.location.href = `/acomodacoes?${params.toString()}`
 
   }
@@ -147,10 +135,23 @@ export default function AcomodacoesPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <Button variant="outline" className="md:w-auto" onClick={() => setShowFilters(!showFilters)}>
-              <Filter className="mr-2 h-5 w-5" />
-              Filtros
-            </Button>
+            <div className="flex gap-2"> {/* Added div for better spacing */}
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Ordenar por" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="popular">Mais Populares</SelectItem>
+                  <SelectItem value="price-asc">Menor Preço</SelectItem>
+                  <SelectItem value="price-desc">Maior Preço</SelectItem>
+                  <SelectItem value="rating">Melhor Avaliação</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button variant="outline" className="md:w-auto" onClick={() => setShowFilters(!showFilters)}>
+                <Filter className="mr-2 h-5 w-4" />
+                Filtros
+              </Button>
+            </div>
           </div>
 
           {/* Filtros */}
@@ -243,7 +244,7 @@ export default function AcomodacoesPage() {
                     <Link href={`/acomodacoes/${acomodacao.id}`}> {/* Assuming ID is used for slug */}
                       <div className="relative h-[200px]">
                         <img
-                          src={acomodacao.imagens[0] || "/placeholder.svg"}
+                          src={acomodacao.imagens.length > 0 ? acomodacao.imagens[0] : "/placeholder.svg"}
                           alt={acomodacao.titulo}
                           className="w-full h-full object-cover"
                         />
@@ -258,7 +259,6 @@ export default function AcomodacoesPage() {
                           <MapPin className="h-4 w-4" />
                           <span>{acomodacao.cidade}</span> {/* Using city instead of address */}
                         </div>
-                        {/* Removed rating and reviews as they are not in the Supabase schema */}
                         <p className="text-graphite-300 text-sm mb-4 line-clamp-2">
                           {/* Removed description as it's not in the Supabase schema */}
                         </p>
