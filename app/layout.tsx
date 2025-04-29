@@ -1,30 +1,8 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Poppins, Playfair_Display } from "next/font/google"
-
-const poppinsFont = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-poppins",
-  display: "swap",
-  preload: true,
-})
-
-const playfairFont = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  display: "swap",
-  preload: true,
-})
 import "./globals.css"
-import dynamic from 'next/dynamic'
-import { ThemeProvider } from "@/components/theme-provider"
-import { Navbar } from "@/components/navbar"
-
-const Footer = dynamic(() => import("@/components/footer"), {
-  loading: () => <div className="h-[200px] bg-gray-50" />,
-  ssr: false
-})
+import { LayoutWrapper } from "@/components/layout-wrapper"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -54,13 +32,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <body suppressHydrationWarning className={`${poppins.variable} ${playfair.variable} font-sans`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <div className="flex min-h-screen flex-col">
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </ThemeProvider>
+        <LayoutWrapper>{children}</LayoutWrapper>
         <a
           href="https://wa.me/5511987654321?text=Olá!%20Gostaria%20de%20informações%20sobre%20acomodações%20na%20Irlanda."
           target="_blank"
