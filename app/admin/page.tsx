@@ -241,6 +241,23 @@ export default function AdminDashboard() {
   // Estado para armazenar as acomodações
   const [accommodations, setAccommodations] = useState([
     {
+      id: 0,
+      name: "Apartamento Teste",
+      type: "Apartamento",
+      location: "Galway",
+      address: "10 Test Street, Galway",
+      price: 150,
+      active: true,
+      features: ["Quarto compartilhado", "Wi-Fi", "Cozinha equipada", "Sala de estudos"],
+      included: ["Internet", "Aquecimento", "Água e luz", "Mobília completa"],
+      notIncluded: ["Café da manhã", "Limpeza", "Transfer"],
+      description: "Apartamento para testes do sistema, localizado em área residencial tranquila.",
+      images: ["/images/shared-apartment.png"],
+      rating: 4.5,
+      reviews: 5,
+      slug: "apartamento-teste",
+    },
+    {
       id: 1,
       name: "Residência Estudantil Central",
       type: "Residência Estudantil",
