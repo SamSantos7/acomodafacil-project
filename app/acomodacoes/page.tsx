@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -23,8 +24,21 @@ import {
   Users,
   Star,
 } from "lucide-react"
+import { supabase } from "@/lib/supabase"
 
-export default function Acomodacoes() {
+interface Acomodacao {
+  id: string
+  titulo: string
+  tipo: string
+  cidade: string
+  preco: number
+  imagens: string[]
+}
+
+export default function AcomodacoesPage() {
+  const searchParams = useSearchParams()
+  const [acomodacoes, setAcomodacoes] = useState<Acomodacao[]>([])
+  const [loading, setLoading] = useState(true)
   // Parallax effect
   const [offsetY, setOffsetY] = useState(0)
   const handleScroll = () => setOffsetY(window.pageYOffset)
@@ -36,202 +50,34 @@ export default function Acomodacoes() {
   const [searchTerm, setSearchTerm] = useState("")
   const [showFilters, setShowFilters] = useState(false)
 
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Dados de exemplo para acomodações
-  const accommodations = [
-    {
-      id: 1,
-      name: "Residência Estudantil Central",
-      type: "Residência Estudantil",
-      location: "Dublin",
-      address: "123 O'Connell Street, Dublin 1",
-      price: 195,
-      active: true,
-      features: ["Quarto individual", "Banheiro privativo", "Wi-Fi", "Cozinha compartilhada"],
-      included: ["Internet de alta velocidade", "Limpeza semanal", "Utensílios de cozinha", "Contas inclusas"],
-      notIncluded: ["Refeições", "Serviço de lavanderia", "Toalhas e roupas de cama"],
-      description: "Residência moderna no centro de Dublin, próxima às principais escolas de inglês e universidades.",
-      images: ["/images/student-residence.png", "/images/apartment-living.png"],
-      rating: 4.8,
-      reviews: 24,
-      slug: "residencia-estudantil-central",
-    },
-    {
-      id: 2,
-      name: "Apartamento Compartilhado - Temple Bar",
-      type: "Apartamento Compartilhado",
-      location: "Dublin",
-      address: "45 Temple Bar, Dublin 2",
-      price: 175,
-      active: true,
-      features: ["Quarto mobiliado", "Cozinha equipada", "Sala comum", "Internet fibra"],
-      included: ["Internet", "TV a cabo", "Mobília completa", "Utensílios domésticos"],
-      notIncluded: ["Contas de luz e gás", "Limpeza", "Alimentação"],
-      description: "Apartamento no coração de Dublin, compartilhado com outros estudantes internacionais.",
-      images: ["/images/shared-apartment.png"],
-      rating: 4.5,
-      reviews: 18,
-      slug: "apartamento-compartilhado-temple-bar",
-    },
-    {
-      id: 3,
-      name: "Casa de Família em Galway",
-      type: "Casa de Família",
-      location: "Galway",
-      address: "78 Salthill Road, Galway",
-      price: 210,
-      active: true,
-      features: ["Quarto privativo", "Café da manhã e jantar", "Ambiente familiar", "Wi-Fi"],
-      included: ["Duas refeições diárias", "Lavanderia semanal", "Internet", "Limpeza do quarto"],
-      notIncluded: ["Almoço", "Transporte", "Material de estudo"],
-      description: "Família acolhedora em Galway, com experiência em receber estudantes internacionais.",
-      images: ["/images/homestay.png"],
-      rating: 4.9,
-      reviews: 32,
-      slug: "casa-de-familia-em-galway",
-    },
-    {
-      id: 4,
-      name: "Estúdio Individual - Cork",
-      type: "Estúdio Individual",
-      location: "Cork",
-      address: "22 Washington Street, Cork",
-      price: 250,
-      active: false,
-      features: ["Totalmente mobiliado", "Cozinha própria", "Banheiro privativo", "Internet"],
-      included: ["Mobília completa", "Internet", "TV", "Utensílios de cozinha"],
-      notIncluded: ["Contas de luz, água e gás", "Limpeza", "Alimentação"],
-      description: "Estúdio moderno e independente no centro de Cork, ideal para quem busca privacidade.",
-      images: ["/images/apartment-living.png"],
-      rating: 4.6,
-      reviews: 15,
-      slug: "estudio-individual-cork",
-    },
-    {
-      id: 5,
-      name: "Residência Universitária - Limerick",
-      type: "Residência Estudantil",
-      location: "Limerick",
-      address: "University of Limerick, Castletroy",
-      price: 185,
-      active: true,
-      features: ["Quarto individual", "Banheiro compartilhado", "Áreas comuns", "Academia"],
-      included: ["Internet", "Água, luz e gás", "Acesso à academia", "Segurança 24h"],
-      notIncluded: ["Alimentação", "Limpeza do quarto", "Lavanderia"],
-      description: "Residência dentro do campus da Universidade de Limerick, com todas as facilidades universitárias.",
-      images: ["/images/student-residence.png"],
-      rating: 4.7,
-      reviews: 21,
-      slug: "residencia-universitaria-limerick",
-    },
-    {
-      id: 6,
-      name: "Apartamento Compartilhado - Galway",
-      type: "Apartamento Compartilhado",
-      location: "Galway",
-      address: "15 Eyre Square, Galway",
-      price: 165,
-      active: true,
-      features: ["Quarto mobiliado", "Cozinha compartilhada", "Sala de estar", "Lavanderia"],
-      included: ["Internet", "Mobília", "Utensílios de cozinha", "Máquina de lavar"],
-      notIncluded: ["Contas de luz e gás", "Alimentação", "Produtos de limpeza"],
-      description: "Apartamento bem localizado no centro de Galway, compartilhado com outros estudantes.",
-      images: ["/images/shared-apartment.png"],
-      rating: 4.4,
-      reviews: 12,
-      slug: "apartamento-compartilhado-galway",
-    },
-    {
-      id: 7,
-      name: "Casa de Família - Dublin",
-      type: "Casa de Família",
-      location: "Dublin",
-      address: "87 Griffith Avenue, Dublin 9",
-      price: 225,
-      active: true,
-      features: ["Quarto privativo", "Todas as refeições", "Ambiente familiar", "Jardim"],
-      included: ["Três refeições diárias", "Lavanderia", "Internet", "Limpeza do quarto"],
-      notIncluded: ["Transporte", "Material de estudo", "Passeios"],
-      description: "Família irlandesa acolhedora em área residencial tranquila, a 20 minutos do centro de Dublin.",
-      images: ["/images/homestay.png"],
-      rating: 4.9,
-      reviews: 28,
-      slug: "casa-de-familia-dublin",
-    },
-    {
-      id: 8,
-      name: "Estúdio Moderno - Limerick",
-      type: "Estúdio Individual",
-      location: "Limerick",
-      address: "34 O'Connell Street, Limerick",
-      price: 230,
-      active: true,
-      features: ["Totalmente mobiliado", "Cozinha equipada", "Banheiro privativo", "Smart TV"],
-      included: ["Internet", "TV a cabo", "Mobília", "Utensílios de cozinha"],
-      notIncluded: ["Contas de luz e gás", "Limpeza", "Alimentação"],
-      description: "Estúdio recém-reformado no centro de Limerick, com móveis modernos e ótima localização.",
-      images: ["/images/apartment-living.png"],
-      rating: 4.8,
-      reviews: 9,
-      slug: "estudio-moderno-limerick",
-    },
-    {
-      id: 9,
-      name: "Residência Premium - Cork",
-      type: "Residência Estudantil",
-      location: "Cork",
-      address: "University College Cork, College Road",
-      price: 240,
-      active: true,
-      features: ["Suíte privativa", "Cozinha compartilhada", "Academia", "Sala de estudos"],
-      included: ["Internet de alta velocidade", "Água, luz e gás", "Limpeza das áreas comuns", "Segurança 24h"],
-      notIncluded: ["Alimentação", "Limpeza do quarto", "Lavanderia"],
-      description: "Residência de alto padrão próxima à University College Cork, com instalações modernas.",
-      images: ["/images/student-residence.png"],
-      rating: 4.7,
-      reviews: 17,
-      slug: "residencia-premium-cork",
-    },
-  ]
+  useEffect(() => {
+    const buscarAcomodacoes = async () => {
+      let query = supabase.from("acomodacoes").select("*")
 
-  // Filtrar acomodações
-  const filteredAccommodations = accommodations.filter((accommodation) => {
-    // Filtrar apenas acomodações ativas
-    if (!accommodation.active) {
-      return false
+      // Aplicar filtros da busca
+      if (searchParams.get("destino")) {
+        query = query.ilike("cidade", `%${searchParams.get("destino")}%`)
+      }
+      if (searchParams.get("tipo")) {
+        query = query.eq("tipo", searchParams.get("tipo"))
+      }
+
+      const { data, error } = await query
+
+      if (data) {
+        setAcomodacoes(data)
+      }
+      setLoading(false)
     }
 
-    // Filtro por cidade
-    if (activeCity !== "all" && accommodation.location.toLowerCase() !== activeCity) {
-      return false
-    }
-
-    // Filtro por tipo
-    if (activeType !== "all" && accommodation.type !== activeType) {
-      return false
-    }
-
-    // Filtro por preço
-    if (accommodation.price < priceRange[0] || accommodation.price > priceRange[1]) {
-      return false
-    }
-
-    // Filtro por termo de busca
-    if (
-      searchTerm &&
-      !accommodation.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !accommodation.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !accommodation.location.toLowerCase().includes(searchTerm.toLowerCase())
-    ) {
-      return false
-    }
-
-    return true
-  })
+    buscarAcomodacoes()
+  }, [searchParams])
 
   const getAccommodationTypeIcon = (type: string) => {
     switch (type) {
@@ -247,6 +93,18 @@ export default function Acomodacoes() {
         return <Bed className="h-5 w-5" />
     }
   }
+
+
+  const updateSearchParams = () => {
+    let params = new URLSearchParams();
+    if (activeCity !== 'all') params.set('destino', activeCity);
+    if (activeType !== 'all') params.set('tipo', activeType);
+    // Add price range and searchTerm handling if needed
+    window.location.href = `/acomodacoes?${params.toString()}`
+
+  }
+
+  if (loading) return <div>Carregando...</div>
 
   return (
     <div className="flex flex-col">
@@ -302,7 +160,7 @@ export default function Acomodacoes() {
               <div className="grid gap-6 md:grid-cols-3">
                 <div className="space-y-2">
                   <label>Cidade</label>
-                  <Select value={activeCity} onValueChange={setActiveCity}>
+                  <Select value={activeCity} onValueChange={(value) => {setActiveCity(value); updateSearchParams();}}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todas as cidades" />
                     </SelectTrigger>
@@ -318,7 +176,7 @@ export default function Acomodacoes() {
 
                 <div className="space-y-2">
                   <label>Tipo de Acomodação</label>
-                  <Select value={activeType} onValueChange={setActiveType}>
+                  <Select value={activeType} onValueChange={(value) => {setActiveType(value); updateSearchParams();}}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os tipos" />
                     </SelectTrigger>
@@ -355,7 +213,7 @@ export default function Acomodacoes() {
 
           {/* Filtro rápido por cidade */}
           <div className="mb-8">
-            <Tabs defaultValue="all" value={activeCity} onValueChange={setActiveCity}>
+            <Tabs defaultValue="all" value={activeCity} onValueChange={(value) => {setActiveCity(value); updateSearchParams();}}>
               <TabsList className="w-full justify-start overflow-x-auto">
                 <TabsTrigger value="all">Todas as cidades</TabsTrigger>
                 <TabsTrigger value="dublin">Dublin</TabsTrigger>
@@ -369,10 +227,10 @@ export default function Acomodacoes() {
           {/* Resultados */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-graphite-400 mb-6">
-              {filteredAccommodations.length} acomodações encontradas
+              {acomodacoes.length} acomodações encontradas
             </h2>
 
-            {filteredAccommodations.length === 0 ? (
+            {acomodacoes.length === 0 ? (
               <div className="text-center py-12 bg-sand-50 rounded-lg">
                 <Bed className="mx-auto h-12 w-12 text-gray-300" />
                 <h3 className="mt-4 text-lg font-medium text-graphite-400">Nenhuma acomodação encontrada</h3>
@@ -380,41 +238,30 @@ export default function Acomodacoes() {
               </div>
             ) : (
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {filteredAccommodations.map((accommodation) => (
-                  <Card key={accommodation.id} className="overflow-hidden border-none shadow-xl card-hover">
-                    <Link href={`/acomodacoes/${accommodation.slug}`}>
+                {acomodacoes.map((acomodacao) => (
+                  <Card key={acomodacao.id} className="overflow-hidden border-none shadow-xl card-hover">
+                    <Link href={`/acomodacoes/${acomodacao.id}`}> {/* Assuming ID is used for slug */}
                       <div className="relative h-[200px]">
-                        <Image
-                          src={accommodation.images[0] || "/placeholder.svg"}
-                          alt={accommodation.name}
-                          fill
-                          className="object-cover"
+                        <img
+                          src={acomodacao.imagens[0] || "/placeholder.svg"}
+                          alt={acomodacao.titulo}
+                          className="w-full h-full object-cover"
                         />
-                        <Badge className="absolute top-3 left-3 bg-white text-graphite-400">{accommodation.type}</Badge>
+                        <Badge className="absolute top-3 left-3 bg-white text-graphite-400">{acomodacao.tipo}</Badge>
                       </div>
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start mb-2">
-                          <h3 className="text-xl font-bold text-graphite-400">{accommodation.name}</h3>
-                          <span className="text-lg font-bold text-teal-500">€{accommodation.price}/semana</span>
+                          <h3 className="text-xl font-bold text-graphite-400">{acomodacao.titulo}</h3>
+                          <span className="text-lg font-bold text-teal-500">€{acomodacao.preco}/semana</span>
                         </div>
                         <div className="flex items-center gap-1 text-sm text-graphite-300 mb-3">
                           <MapPin className="h-4 w-4" />
-                          <span>{accommodation.address}</span>
+                          <span>{acomodacao.cidade}</span> {/* Using city instead of address */}
                         </div>
-                        <div className="flex items-center gap-1 text-sm text-gold-500 mb-4">
-                          <Star className="h-4 w-4 fill-current" />
-                          <span>{accommodation.rating}</span>
-                          <span className="text-graphite-300">({accommodation.reviews} avaliações)</span>
-                        </div>
-                        <p className="text-graphite-300 text-sm mb-4 line-clamp-2">{accommodation.description}</p>
-                        <div className="space-y-2 mb-4">
-                          {accommodation.features.slice(0, 3).map((feature, index) => (
-                            <div key={index} className="flex items-start gap-2 text-sm text-graphite-300">
-                              <CheckCircle className="h-4 w-4 text-teal-500 flex-shrink-0 mt-0.5" />
-                              <span>{feature}</span>
-                            </div>
-                          ))}
-                        </div>
+                        {/* Removed rating and reviews as they are not in the Supabase schema */}
+                        <p className="text-graphite-300 text-sm mb-4 line-clamp-2">
+                          {/* Removed description as it's not in the Supabase schema */}
+                        </p>
                         <Button className="w-full bg-teal-500 hover:bg-teal-600 text-white">Ver Detalhes</Button>
                       </CardContent>
                     </Link>

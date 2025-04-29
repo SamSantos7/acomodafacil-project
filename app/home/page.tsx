@@ -1,96 +1,100 @@
+"use client"
 
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select } from "@/components/ui/select"
+import { Card } from "@/components/ui/card"
+import { useRouter } from "next/navigation"
 import Image from 'next/image'
 import Link from 'next/link'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Calendar, Home, Building2, Users } from 'lucide-react'
 
 export default function HomePage() {
+  const router = useRouter()
+  const [busca, setBusca] = useState({
+    destino: "",
+    tipo: "",
+    semanas: "",
+    dataInicio: "",
+    pessoas: ""
+  })
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    router.push(`/acomodacoes?${new URLSearchParams(busca).toString()}`)
+  }
+
   return (
-    <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center bg-premium-beige">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/hero-home.png"
-            alt="Apartamento premium"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
-        
-        <div className="container relative z-10">
-          <div className="max-w-4xl mx-auto text-center text-white mb-8">
-            <h1 className="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Seu Lar no Intercâmbio
-            </h1>
-            <p className="text-lg md:text-xl mb-8">
-              Encontre a acomodação ideal para sua experiência na Irlanda
-            </p>
+    <main className="container mx-auto px-4 py-8">
+      <Card className="p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto">
+        <h2 className="text-2xl font-bold text-center mb-6">Encontre sua Acomodação Ideal</h2>
+
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Destino</label>
+            <Input 
+              type="text"
+              placeholder="Digite a cidade"
+              value={busca.destino}
+              onChange={(e) => setBusca({...busca, destino: e.target.value})}
+            />
           </div>
 
-          {/* Search Box */}
-          <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg max-w-4xl mx-auto">
-            <form 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-              onSubmit={(e) => {
-                e.preventDefault()
-                const formData = new FormData(e.currentTarget)
-                const params = new URLSearchParams(formData as any)
-                window.location.href = `/acomodacoes?${params.toString()}`
-              }}
+          <div>
+            <label className="block text-sm font-medium mb-1">Tipo de Acomodação</label>
+            <select 
+              className="w-full rounded-md border border-gray-300 p-2"
+              value={busca.tipo}
+              onChange={(e) => setBusca({...busca, tipo: e.target.value})}
             >
-              <Select name="destino" required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Escolha o destino" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="dublin">Dublin</SelectItem>
-                  <SelectItem value="cork">Cork</SelectItem>
-                  <SelectItem value="galway">Galway</SelectItem>
-                  <SelectItem value="limerick">Limerick</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select name="tipo" required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Tipo de acomodação" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="residencia">Residência Estudantil</SelectItem>
-                  <SelectItem value="apartamento">Apartamento Compartilhado</SelectItem>
-                  <SelectItem value="homestay">Casa de Família</SelectItem>
-                  <SelectItem value="studio">Estúdio Individual</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <div className="grid grid-cols-2 gap-2">
-                <Input type="number" placeholder="Semanas" name="semanas" min="1" required />
-                <Input type="number" placeholder="Pessoas" name="pessoas" min="1" required />
-              </div>
-
-              <div className="md:col-span-2 lg:col-span-2">
-                <Input type="date" placeholder="Data de início" name="data_inicio" required />
-              </div>
-
-              <Button type="submit" className="w-full bg-premium-gold hover:bg-premium-gold/90">
-                Buscar Acomodações
-              </Button>
-            </form>
+              <option value="">Selecione</option>
+              <option value="apartamento">Apartamento</option>
+              <option value="residencia">Residência Estudantil</option>
+              <option value="homestay">Homestay</option>
+              <option value="studio">Estúdio Individual</option>
+            </select>
           </div>
-        </div>
-      </section>
 
-      {/* Popular Accommodations */}
-      <section className="py-20 bg-white">
-        <div className="container">
-          <h2 className="text-3xl md:text-4xl font-playfair font-bold text-center mb-12">
-            Acomodações Populares
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div>
+            <label className="block text-sm font-medium mb-1">Semanas</label>
+            <Input 
+              type="number"
+              placeholder="Número de semanas"
+              value={busca.semanas}
+              onChange={(e) => setBusca({...busca, semanas: e.target.value})}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Data de Início</label>
+            <Input 
+              type="date"
+              value={busca.dataInicio}
+              onChange={(e) => setBusca({...busca, dataInicio: e.target.value})}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Número de Pessoas</label>
+            <Input 
+              type="number"
+              placeholder="Quantidade de pessoas"
+              value={busca.pessoas}
+              onChange={(e) => setBusca({...busca, pessoas: e.target.value})}
+            />
+          </div>
+
+          <div className="flex items-end">
+            <Button type="submit" className="w-full bg-teal-600 hover:bg-teal-700">
+              Buscar
+            </Button>
+          </div>
+        </form>
+      </Card>
+
+      <section className="mt-16">
+        <h2 className="text-3xl font-bold text-center mb-8">Acomodações Populares</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {popularAccommodations.map((acc, index) => (
               <Link 
                 key={index} 
@@ -115,43 +119,9 @@ export default function HomePage() {
                 </div>
               </Link>
             ))}
-          </div>
         </div>
       </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-premium-beige">
-        <div className="container">
-          <h2 className="text-3xl md:text-4xl font-playfair font-bold text-center mb-12">
-            Com a gente, você chega com endereço certo
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="text-center p-6">
-              <Home className="w-12 h-12 mx-auto mb-4 text-premium-gold" />
-              <h3 className="text-xl font-bold mb-2">Acomodações Verificadas</h3>
-              <p className="text-gray-600">Todas as opções são cuidadosamente selecionadas e verificadas.</p>
-            </div>
-            <div className="text-center p-6">
-              <Building2 className="w-12 h-12 mx-auto mb-4 text-premium-gold" />
-              <h3 className="text-xl font-bold mb-2">Localização Estratégica</h3>
-              <p className="text-gray-600">Próximo a escolas, transporte e facilidades.</p>
-            </div>
-            <div className="text-center p-6">
-              <Users className="w-12 h-12 mx-auto mb-4 text-premium-gold" />
-              <h3 className="text-xl font-bold mb-2">Suporte Dedicado</h3>
-              <p className="text-gray-600">Acompanhamento durante toda sua estadia.</p>
-            </div>
-          </div>
-          <div className="text-center">
-            <Button asChild size="lg" className="bg-premium-gold hover:bg-premium-gold/90">
-              <Link href="/acomodacoes">
-                Encontre a acomodação ideal
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-    </div>
+    </main>
   )
 }
 
