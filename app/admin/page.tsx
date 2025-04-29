@@ -53,7 +53,46 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function AdminDashboard() {
   const { toast } = useToast()
-  const [activeTab, setActiveTab] = useState("leads")
+  const [activeTab, setActiveTab] = useState("dashboard")
+  const [loading, setLoading] = useState(false)
+
+  // Dados de exemplo para os cards
+  const dashboardStats = {
+    totalLeads: 157,
+    leadsNovos: 24,
+    conversaoMes: 68,
+    taxaConversao: 43,
+    acomodacoesAtivas: 42,
+    ocupacaoMedia: 89,
+    clientesAtivos: 126,
+    satisfacaoMedia: 4.8
+  }
+
+  // Dados de exemplo para o gráfico de leads
+  const leadChartData = {
+    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+    datasets: [
+      {
+        label: 'Leads Recebidos',
+        data: [65, 78, 90, 85, 102, 157],
+        borderColor: '#0EA5E9',
+        backgroundColor: '#0EA5E9',
+      }
+    ]
+  }
+
+  // Dados de exemplo para o gráfico de conversão
+  const conversionChartData = {
+    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+    datasets: [
+      {
+        label: 'Taxa de Conversão (%)',
+        data: [35, 38, 40, 42, 45, 43],
+        borderColor: '#22C55E',
+        backgroundColor: '#22C55E',
+      }
+    ]
+  }
   const [showAddPartnerDialog, setShowAddPartnerDialog] = useState(false)
   const [showResponseDialog, setShowResponseDialog] = useState(false)
   const [selectedLead, setSelectedLead] = useState<any>(null)
@@ -492,6 +531,14 @@ export default function AdminDashboard() {
         <div className="flex-1 overflow-y-auto py-4">
           <nav className="px-4 space-y-2">
             <Button
+              variant={activeTab === "dashboard" ? "default" : "ghost"}
+              className="w-full justify-start"
+              onClick={() => setActiveTab("dashboard")}
+            >
+              <LineChart className="mr-2 h-5 w-5" />
+              Dashboard
+            </Button>
+            <Button
               variant={activeTab === "leads" ? "default" : "ghost"}
               className="w-full justify-start"
               onClick={() => setActiveTab("leads")}
@@ -544,6 +591,169 @@ export default function AdminDashboard() {
 
         {/* Content */}
         <div className="flex-1 p-6 overflow-y-auto">
+          {activeTab === "dashboard" && (
+            <div className="space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <h1 className="text-2xl font-bold text-graphite-400">Dashboard</h1>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm">
+                    Últimos 30 dias
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    Exportar Relatório
+                  </Button>
+                </div>
+              </div>
+
+              {/* Stats Cards */}
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-graphite-300">Total de Leads</p>
+                        <h3 className="text-2xl font-bold text-graphite-400 mt-1">{dashboardStats.totalLeads}</h3>
+                      </div>
+                      <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Users className="h-6 w-6 text-blue-500" />
+                      </div>
+                    </div>
+                    <div className="mt-4 flex items-center text-sm">
+                      <span className="text-green-500 font-medium">+{dashboardStats.leadsNovos} novos</span>
+                      <span className="text-graphite-300 ml-2">neste mês</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-graphite-300">Conversões</p>
+                        <h3 className="text-2xl font-bold text-graphite-400 mt-1">{dashboardStats.conversaoMes}</h3>
+                      </div>
+                      <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <CheckCircle className="h-6 w-6 text-green-500" />
+                      </div>
+                    </div>
+                    <div className="mt-4 flex items-center text-sm">
+                      <span className="text-green-500 font-medium">{dashboardStats.taxaConversao}% taxa</span>
+                      <span className="text-graphite-300 ml-2">de conversão</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-graphite-300">Acomodações</p>
+                        <h3 className="text-2xl font-bold text-graphite-400 mt-1">{dashboardStats.acomodacoesAtivas}</h3>
+                      </div>
+                      <div className="h-12 w-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <Building className="h-6 w-6 text-purple-500" />
+                      </div>
+                    </div>
+                    <div className="mt-4 flex items-center text-sm">
+                      <span className="text-purple-500 font-medium">{dashboardStats.ocupacaoMedia}% ocupação</span>
+                      <span className="text-graphite-300 ml-2">média</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-graphite-300">Clientes Ativos</p>
+                        <h3 className="text-2xl font-bold text-graphite-400 mt-1">{dashboardStats.clientesAtivos}</h3>
+                      </div>
+                      <div className="h-12 w-12 bg-amber-100 rounded-full flex items-center justify-center">
+                        <Star className="h-6 w-6 text-amber-500" />
+                      </div>
+                    </div>
+                    <div className="mt-4 flex items-center text-sm">
+                      <span className="text-amber-500 font-medium">{dashboardStats.satisfacaoMedia}/5.0</span>
+                      <span className="text-graphite-300 ml-2">satisfação</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Charts */}
+              <div className="grid gap-6 md:grid-cols-2">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Leads por Mês</CardTitle>
+                    <CardDescription>Evolução mensal de leads recebidos</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="h-[300px]">
+                      {/* Aqui vai o componente de gráfico de linha */}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Taxa de Conversão</CardTitle>
+                    <CardDescription>Percentual mensal de conversão de leads</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="h-[300px]">
+                      {/* Aqui vai o componente de gráfico de linha */}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Recent Activity */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Atividade Recente</CardTitle>
+                  <CardDescription>Últimas ações e atualizações no sistema</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-8">
+                    {/* Timeline items */}
+                    <div className="flex gap-4">
+                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <MessageSquare className="h-5 w-5 text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-graphite-400">Novo lead recebido</p>
+                        <p className="text-sm text-graphite-300">João Silva solicitou informações sobre acomodações em Dublin</p>
+                        <p className="text-xs text-graphite-300 mt-1">Há 5 minutos</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                        <CheckCircle className="h-5 w-5 text-green-500" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-graphite-400">Reserva confirmada</p>
+                        <p className="text-sm text-graphite-300">Maria Oliveira confirmou reserva na Residência Estudantil Central</p>
+                        <p className="text-xs text-graphite-300 mt-1">Há 2 horas</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
+                        <Star className="h-5 w-5 text-amber-500" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-graphite-400">Nova avaliação</p>
+                        <p className="text-sm text-graphite-300">Pedro Santos avaliou sua experiência com 5 estrelas</p>
+                        <p className="text-xs text-graphite-300 mt-1">Há 5 horas</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
           {activeTab === "leads" && (
             <div className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
