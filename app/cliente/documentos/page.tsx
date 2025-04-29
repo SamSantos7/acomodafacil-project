@@ -182,28 +182,35 @@ export default function DocumentosPage() {
         ) : (
           documentos.map((doc) => (
             <Card key={doc.id}>
-              <CardContent className="flex items-center justify-between py-4">
-                <div>
-                  <p className="font-medium">{doc.nome}</p>
-                  <p className="text-sm text-graphite-300">
-                    {new Date(doc.created_at).toLocaleDateString()}
-                  </p>
+              <CardContent className="flex items-center justify-between py-4 hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <FileDown className="h-5 w-5 text-blue-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{doc.nome}</p>
+                    <p className="text-sm text-graphite-300">
+                      {new Date(doc.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    size="icon"
+                    className="hover:bg-blue-50 hover:text-blue-500 transition-colors"
                     onClick={() => baixarDocumento(doc.caminho, doc.nome)}
                   >
-                    <FileDown className="w-4 h-4" />
+                    <FileDown className="w-4 h-4 mr-2" />
+                    Baixar
                   </Button>
                   <Button
                     variant="outline"
-                    size="icon"
+                    className="hover:bg-red-50 hover:text-red-500 transition-colors"
                     onClick={() => excluirDocumento(doc.id, doc.caminho)}
                     disabled={loading}
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Excluir
                   </Button>
                 </div>
               </CardContent>

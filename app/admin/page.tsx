@@ -781,12 +781,38 @@ export default function AdminDashboard() {
           {activeTab === "leads" && (
             <div className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <h1 className="text-2xl font-bold text-graphite-400">Gerenciar Leads</h1>
+                <div>
+                  <h1 className="text-2xl font-bold text-graphite-400">Gerenciar Leads</h1>
+                  <div className="flex gap-3 mt-2">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+                      {leads.filter(l => l.status === 'Novo').length} novos leads
+                    </Badge>
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                      {leads.filter(l => l.status === 'Convertido').length} convertidos
+                    </Badge>
+                  </div>
+                </div>
                 <div className="flex gap-2">
                   <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                    <Input type="search" placeholder="Buscar leads..." className="pl-8 w-full md:w-[250px]" />
+                    <Input 
+                      type="search" 
+                      placeholder="Buscar por nome, destino ou data..." 
+                      className="pl-8 w-full md:w-[300px]" 
+                    />
                   </div>
+                  <Select defaultValue="all">
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Filtrar por" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos os leads</SelectItem>
+                      <SelectItem value="new">Novos</SelectItem>
+                      <SelectItem value="dublin">Dublin</SelectItem>
+                      <SelectItem value="cork">Cork</SelectItem>
+                      <SelectItem value="galway">Galway</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <Button variant="outline" size="icon">
                     <Filter className="h-4 w-4" />
                   </Button>

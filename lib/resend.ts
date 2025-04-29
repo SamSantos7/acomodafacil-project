@@ -73,7 +73,7 @@ export const sendReservationCancellation = async (reservation: Reservation) => {
   }
 }
 
-export async function sendReservationEmail(to: string, name: string, status: string) {
+export async function sendReservationEmail(to: string, name: string, status: string, reservationDetails?: any) {
   await resend.emails.send({
     from: 'AcomodaFácil <no-reply@acomodafacil.com>',
     to,
@@ -81,7 +81,17 @@ export async function sendReservationEmail(to: string, name: string, status: str
     html: `
       <h1>Olá ${name},</h1>
       <p>O status da sua reserva foi atualizado para: <strong>${status}</strong></p>
+      ${reservationDetails ? `
+        <div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 5px;">
+          <p><strong>Detalhes da Reserva:</strong></p>
+          <p>Data de Check-in: ${new Date(reservationDetails.data_checkin).toLocaleDateString()}</p>
+          <p>Data de Check-out: ${new Date(reservationDetails.data_checkout).toLocaleDateString()}</p>
+          <p>Destino: ${reservationDetails.cidade}</p>
+          <p>Acomodação: ${reservationDetails.tipo_acomodacao}</p>
+        </div>
+      ` : ''}
       <p>Acesse sua área do cliente para mais detalhes.</p>
+      <p><a href="https://acomodafacil.com/cliente/dashboard" style="background: #0EA5E9; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Acessar Dashboard</a></p>
     `
   })
 }

@@ -52,8 +52,11 @@ export const sendWhatsAppMessage = async (to: string, message: string) => {
 export const sendReservationStatusNotification = async (reservation: Reservation, clientPhone: string) => {
   const statusMessages = {
     pendente: 'Sua reserva está pendente de confirmação.',
-    confirmada: 'Sua reserva foi confirmada! 🎉',
-    cancelada: 'Sua reserva foi cancelada.'
+    confirmada: 'Sua reserva foi confirmada! 🎉 Veja os próximos passos.',
+    cancelada: 'Sua reserva foi cancelada.',
+    processando: 'Sua reserva está em processamento.',
+    documentos_pendentes: 'Documentos pendentes para sua reserva.',
+    pagamento_confirmado: 'Pagamento confirmado! Prosseguindo com sua reserva.'
   }
 
   const message = `AcomodaFácil - Atualização de Reserva

@@ -77,7 +77,22 @@ export default function ClienteDashboard() {
             <div className="text-2xl font-bold">
               {diasRestantes >= 0 ? `${diasRestantes} dias` : "Data de viagem já passou!"}
             </div>
-             {dataViagem && <p>Data prevista: {dataViagem.toLocaleDateString('pt-BR')}</p>}
+            {dataViagem && (
+              <div className="mt-2 space-y-1 text-sm">
+                <p className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-2 text-teal-500" />
+                  Data prevista: {dataViagem.toLocaleDateString('pt-BR')}
+                </p>
+                <p className="flex items-center">
+                  <MapPin className="h-4 w-4 mr-2 text-teal-500" />
+                  Destino: {reservas[0]?.cidade || "Não definido"}
+                </p>
+                <p className="flex items-center">
+                  <Bell className="h-4 w-4 mr-2 text-teal-500" />
+                  Status: {reservas[0]?.status || "Aguardando"}
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
