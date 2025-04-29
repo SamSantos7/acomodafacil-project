@@ -252,7 +252,7 @@ export default function AdminDashboard() {
       included: ["Internet", "Aquecimento", "Água e luz", "Mobília completa"],
       notIncluded: ["Café da manhã", "Limpeza", "Transfer"],
       description: "Apartamento para testes do sistema, localizado em área residencial tranquila.",
-      images: ["/images/shared-apartment.png"],
+      images: ["/images/dublin-city.png", "/images/cork-city.png", "/images/galway-city.png"],
       rating: 4.5,
       reviews: 5,
       slug: "apartamento-teste",

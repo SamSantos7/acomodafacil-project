@@ -49,7 +49,7 @@ export default function Destinos() {
       name: "Waterford",
       description: "Cidade histórica com ambiente tranquilo, ideal para estudantes que buscam foco nos estudos.",
       count: "40+ acomodações",
-      image: "/images/waterford-city.png",
+      image: "/images/galway-city.png", // Usando Galway como fallback
       options: ["Casas de família", "Apartamentos compartilhados", "Acomodações de curta duração"],
     },
     {

@@ -282,7 +282,7 @@ export default function AcomodacoesPage() {
                     <Link href={`/acomodacoes/${acomodacao.id}`}> {/* Assuming ID is used for slug */}
                       <div className="relative h-[200px]">
                         <img
-                          src={acomodacao.imagens.length > 0 ? acomodacao.imagens[0] : "/placeholder.svg"}
+                          src={acomodacao.imagens.length > 0 ? acomodacao.imagens[0] : "/images/dublin-city.png"}
                           alt={acomodacao.titulo}
                           className="w-full h-full object-cover"
                           loading="lazy"

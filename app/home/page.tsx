@@ -130,24 +130,24 @@ export default function HomePage() {
 
 const popularAccommodations = [
   {
-    title: "Apartamento Teste",
-    location: "Galway",
-    price: "€150",
-    image: "/images/shared-apartment.png",
-    slug: "apartamento-teste"
-  },
-  {
-    title: "Residência Estudantil Central",
+    title: "Apartamento em Dublin",
     location: "Dublin",
-    price: "€195",
-    image: "/images/student-residence.png",
-    slug: "residencia-estudantil-central"
+    price: "€150",
+    image: "/images/dublin-city.png",
+    slug: "apartamento-dublin"
   },
   {
-    title: "Casa de Família em Galway",
+    title: "Residência em Cork",
+    location: "Cork",
+    price: "€195",
+    image: "/images/cork-city.png",
+    slug: "residencia-cork"
+  },
+  {
+    title: "Casa em Galway",
     location: "Galway",
     price: "€210",
-    image: "/images/homestay.png",
-    slug: "casa-de-familia-em-galway"
+    image: "/images/galway-city.png",
+    slug: "casa-galway"
   }
 ]
