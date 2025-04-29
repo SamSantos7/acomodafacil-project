@@ -1,3 +1,6 @@
+
+import { Reservation, Document } from './types'
+
 export const sendWhatsAppMessage = async (to: string, message: string) => {
   try {
     const response = await fetch(
@@ -13,7 +16,7 @@ export const sendWhatsAppMessage = async (to: string, message: string) => {
           to: to,
           type: 'template',
           template: {
-            name: 'lead_confirmation',
+            name: 'notification',
             language: {
               code: 'pt_BR',
             },
@@ -46,20 +49,41 @@ export const sendWhatsAppMessage = async (to: string, message: string) => {
   }
 }
 
-export const sendLeadWhatsAppNotification = async (lead: any) => {
-  const message = `Olá ${lead.nome}! 👋
+export const sendReservationStatusNotification = async (reservation: Reservation, clientPhone: string) => {
+  const statusMessages = {
+    pendente: 'Sua reserva está pendente de confirmação.',
+    confirmada: 'Sua reserva foi confirmada! 🎉',
+    cancelada: 'Sua reserva foi cancelada.'
+  }
 
-Recebemos sua solicitação de acomodação na AcomodaFácil.
+  const message = `AcomodaFácil - Atualização de Reserva
 
-📍 Cidade: ${lead.cidade}
-🏠 Tipo: ${lead.tipo_acomodacao}
-📅 Chegada: ${lead.data_chegada}
-⏳ Duração: ${lead.duracao}
+${statusMessages[reservation.status]}
 
-Em breve nossa equipe entrará em contato com opções personalizadas para você!
+ID da Reserva: ${reservation.id}
+Check-in: ${new Date(reservation.data_checkin).toLocaleDateString()}
+Check-out: ${new Date(reservation.data_checkout).toLocaleDateString()}
 
-Atenciosamente,
-Equipe AcomodaFácil`
+Para mais detalhes, acesse sua área do cliente.`
 
-  return sendWhatsAppMessage(lead.whatsapp, message)
-} 
+  return sendWhatsAppMessage(clientPhone, message)
+}
+
+export const sendDocumentNotification = async (document: Document, clientPhone: string) => {
+  const message = `AcomodaFácil - Novo Documento
+
+Um novo documento foi ${document.tipo === 'upload' ? 'enviado' : 'recebido'}: ${document.nome}
+
+Acesse sua área do cliente para visualizar.`
+
+  return sendWhatsAppMessage(clientPhone, message)
+}
+
+export const sendNewMessageNotification = async (clientPhone: string) => {
+  const message = `AcomodaFácil - Nova Mensagem
+
+Você recebeu uma nova mensagem em sua caixa de entrada.
+Acesse sua área do cliente para visualizar.`
+
+  return sendWhatsAppMessage(clientPhone, message)
+}
