@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -50,6 +51,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/components/ui/use-toast"
+import { Star } from "lucide-react";
 
 export default function AdminDashboard() {
   const { toast } = useToast()
@@ -689,7 +691,18 @@ export default function AdminDashboard() {
                   </CardHeader>
                   <CardContent className="p-6">
                     <div className="h-[300px]">
-                      {/* Aqui vai o componente de gráfico de linha */}
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={leadChartData.datasets[0].data.map((value, index) => ({
+                          month: leadChartData.labels[index],
+                          leads: value
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="month" />
+                          <YAxis />
+                          <Tooltip />
+                          <Line type="monotone" dataKey="leads" stroke="#0EA5E9" strokeWidth={2} />
+                        </LineChart>
+                      </ResponsiveContainer>
                     </div>
                   </CardContent>
                 </Card>
@@ -701,7 +714,18 @@ export default function AdminDashboard() {
                   </CardHeader>
                   <CardContent className="p-6">
                     <div className="h-[300px]">
-                      {/* Aqui vai o componente de gráfico de linha */}
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={conversionChartData.datasets[0].data.map((value, index) => ({
+                          month: conversionChartData.labels[index],
+                          conversion: value
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="month" />
+                          <YAxis />
+                          <Tooltip />
+                          <Line type="monotone" dataKey="conversion" stroke="#22C55E" strokeWidth={2} />
+                        </LineChart>
+                      </ResponsiveContainer>
                     </div>
                   </CardContent>
                 </Card>
