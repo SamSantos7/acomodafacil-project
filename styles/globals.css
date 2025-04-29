@@ -92,3 +92,25 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .form-container {
+    @apply w-full max-w-md mx-auto px-4 md:px-6;
+  }
+  
+  .form-content {
+    @apply space-y-4 md:space-y-6;
+  }
+  
+  .auth-form {
+    @apply w-full max-w-lg mx-auto px-4 md:px-0;
+  }
+}
+
+.hover-scale {
+  @apply transition-transform duration-200 hover:scale-105;
+}
+
+.page-transition {
+  @apply animate-fadeIn;
+}
