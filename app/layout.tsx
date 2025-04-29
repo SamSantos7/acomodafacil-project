@@ -1,6 +1,21 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Poppins, Playfair_Display } from "next/font/google"
+
+const poppinsFont = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-poppins",
+  display: "swap",
+  preload: true,
+})
+
+const playfairFont = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+  preload: true,
+})
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/navbar"
