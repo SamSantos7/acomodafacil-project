@@ -2,184 +2,214 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Upload, FileDown, Trash2 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { supabase } from "@/lib/supabase"
-import { Upload, Download, Trash2 } from "lucide-react"
-import { Input } from "@/components/ui/input"
 
 export default function DocumentosPage() {
+  const [documentos, setDocumentos] = useState([])
+  const [loading, setLoading] = useState(false)
   const { toast } = useToast()
-  const [uploading, setUploading] = useState(false)
-  const [documents, setDocuments] = useState<any[]>([])
 
   useEffect(() => {
-    loadDocuments()
+    carregarDocumentos()
   }, [])
 
-  const loadDocuments = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
-      const { data } = await supabase
-        .from('documents')
+  const carregarDocumentos = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { data, error } = await supabase
+        .from('documentos')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
-      if (data) setDocuments(data)
+      if (error) throw error
+      setDocumentos(data || [])
+    } catch (error) {
+      toast({
+        title: "Erro ao carregar documentos",
+        description: error.message,
+        variant: "destructive"
+      })
     }
   }
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || !e.target.files[0]) return
-
-    const file = e.target.files[0]
-    setUploading(true)
-
+  const uploadDocumento = async (event) => {
     try {
+      setLoading(true)
+      const file = event.target.files[0]
+      if (!file) return
+
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error('No user')
+      if (!user) throw new Error("Usuário não autenticado")
 
       const fileExt = file.name.split('.').pop()
       const fileName = `${Math.random()}.${fileExt}`
       const filePath = `${user.id}/${fileName}`
 
       const { error: uploadError } = await supabase.storage
-        .from('documents')
+        .from('documentos')
         .upload(filePath, file)
 
       if (uploadError) throw uploadError
 
       const { error: dbError } = await supabase
-        .from('documents')
+        .from('documentos')
         .insert({
           user_id: user.id,
-          name: file.name,
-          path: filePath,
-          type: file.type
+          nome: file.name,
+          tipo: file.type,
+          caminho: filePath
         })
 
       if (dbError) throw dbError
 
       toast({
-        title: "Upload realizado",
-        description: "Documento enviado com sucesso!"
+        title: "Sucesso!",
+        description: "Documento enviado com sucesso"
       })
 
-      loadDocuments()
+      carregarDocumentos()
     } catch (error) {
       toast({
-        variant: "destructive",
-        title: "Erro no upload",
-        description: "Não foi possível enviar o documento."
+        title: "Erro ao enviar documento",
+        description: error.message,
+        variant: "destructive"
       })
     } finally {
-      setUploading(false)
+      setLoading(false)
     }
   }
 
-  const handleDownload = async (path: string, name: string) => {
+  const excluirDocumento = async (id, caminho) => {
+    try {
+      setLoading(true)
+      const { error: storageError } = await supabase.storage
+        .from('documentos')
+        .remove([caminho])
+
+      if (storageError) throw storageError
+
+      const { error: dbError } = await supabase
+        .from('documentos')
+        .delete()
+        .eq('id', id)
+
+      if (dbError) throw dbError
+
+      toast({
+        title: "Sucesso!",
+        description: "Documento excluído com sucesso"
+      })
+
+      carregarDocumentos()
+    } catch (error) {
+      toast({
+        title: "Erro ao excluir documento",
+        description: error.message,
+        variant: "destructive"
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const baixarDocumento = async (caminho, nome) => {
     try {
       const { data, error } = await supabase.storage
-        .from('documents')
-        .download(path)
+        .from('documentos')
+        .download(caminho)
 
       if (error) throw error
 
-      const url = window.URL.createObjectURL(data)
+      const blob = new Blob([data], { type: 'application/octet-stream' })
+      const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = name
+      a.download = nome
       a.click()
       window.URL.revokeObjectURL(url)
     } catch (error) {
       toast({
-        variant: "destructive",
-        title: "Erro no download",
-        description: "Não foi possível baixar o documento."
-      })
-    }
-  }
-
-  const handleDelete = async (id: string, path: string) => {
-    try {
-      await supabase.storage.from('documents').remove([path])
-      await supabase.from('documents').delete().eq('id', id)
-      
-      toast({
-        title: "Documento excluído",
-        description: "O documento foi removido com sucesso."
-      })
-      
-      loadDocuments()
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro ao excluir",
-        description: "Não foi possível remover o documento."
+        title: "Erro ao baixar documento",
+        description: error.message,
+        variant: "destructive"
       })
     }
   }
 
   return (
-    <div className="container py-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Meus Documentos</h1>
-          <div>
+    <div className="container px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-graphite-400">Meus Documentos</h1>
+      </div>
+
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Upload de Documento</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-4">
             <Input
               type="file"
-              className="hidden"
-              id="fileUpload"
-              onChange={handleUpload}
-              accept=".pdf,.jpg,.png,.doc,.docx"
+              onChange={uploadDocumento}
+              disabled={loading}
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
             />
-            <Button 
-              onClick={() => document.getElementById('fileUpload')?.click()}
-              disabled={uploading}
-            >
+            <Button disabled={loading}>
               <Upload className="w-4 h-4 mr-2" />
-              {uploading ? "Enviando..." : "Enviar Documento"}
+              Enviar
             </Button>
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        <div className="space-y-4">
-          {documents.map((doc) => (
-            <Card key={doc.id} className="p-4 flex items-center justify-between">
-              <div className="flex-1">
-                <p className="font-medium">{doc.name}</p>
-                <p className="text-sm text-gray-500">
-                  {new Date(doc.created_at).toLocaleDateString()}
-                </p>
-              </div>
-              
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleDownload(doc.path, doc.name)}
-                >
-                  <Download className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleDelete(doc.id, doc.path)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
+      <div className="grid gap-4">
+        {documentos.length === 0 ? (
+          <Card>
+            <CardContent className="py-8">
+              <p className="text-center text-graphite-300">
+                Você ainda não possui documentos.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          documentos.map((doc) => (
+            <Card key={doc.id}>
+              <CardContent className="flex items-center justify-between py-4">
+                <div>
+                  <p className="font-medium">{doc.nome}</p>
+                  <p className="text-sm text-graphite-300">
+                    {new Date(doc.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => baixarDocumento(doc.caminho, doc.nome)}
+                  >
+                    <FileDown className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => excluirDocumento(doc.id, doc.caminho)}
+                    disabled={loading}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </CardContent>
             </Card>
-          ))}
-
-          {documents.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              <p>Você ainda não possui documentos enviados.</p>
-            </div>
-          )}
-        </div>
+          ))
+        )}
       </div>
     </div>
   )

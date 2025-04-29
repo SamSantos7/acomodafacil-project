@@ -10,23 +10,34 @@ export default function ClienteDashboard() {
   const [user, setUser] = useState<any>(null)
   const [reservas, setReservas] = useState([])
   const [diasRestantes, setDiasRestantes] = useState(0)
-  const [dataViagem, setDataViagem] = useState(null); // Added state for travel date
+  const [dataViagem, setDataViagem] = useState(null)
 
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
 
-      // Buscar reservas do usuário
       if (user) {
-        const { data } = await supabase
+        // Buscar reservas do usuário
+        const { data: reservas } = await supabase
           .from('reservas')
           .select('*')
           .eq('user_id', user.id)
+          .order('data_viagem', { ascending: true })
+          .limit(1)
 
-        if (data && data.length > 0) {
-          setReservas(data)
-          setDataViagem(new Date(data[0].data_viagem)); // Assuming 'data_viagem' field exists
+        // Buscar dados do usuário
+        const { data: userData } = await supabase
+          .from('usuarios')
+          .select('data_viagem')
+          .eq('id', user.id)
+          .single()
+
+        if (reservas?.length > 0) {
+          setReservas(reservas)
+          setDataViagem(new Date(reservas[0].data_viagem))
+        } else if (userData?.data_viagem) {
+          setDataViagem(new Date(userData.data_viagem))
         }
       }
     }
@@ -41,7 +52,7 @@ export default function ClienteDashboard() {
       const dias = Math.ceil(diferenca / (1000 * 3600 * 24))
       setDiasRestantes(dias)
     }
-  }, [dataViagem])
+  }, [dataViagem]))
 
   return (
     <div className="container px-4 py-8">
