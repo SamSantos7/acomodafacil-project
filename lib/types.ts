@@ -1,31 +1,45 @@
 
-export interface Lead {
-  id?: string
-  nome: string
+export interface User {
+  id: string
   email: string
-  whatsapp: string
+  nome_completo: string
+  data_nascimento: string
+  instituicao_ensino: string
+  data_viagem: string
   cidade: string
-  tipo_acomodacao: string
-  data_chegada: string
-  duracao: string
-  data_envio?: string
-}
-
-export interface Document {
-  id?: string
-  user_id: string
-  nome: string
-  tipo: string
-  url: string
-  data_upload?: string
+  estado: string
+  telefone: string
+  role: 'admin' | 'client'
 }
 
 export interface Reservation {
-  id?: string
+  id: string
   user_id: string
-  acomodacao_id: string
+  accommodation_id: string
+  status: 'pendente' | 'confirmada' | 'cancelada'
   data_checkin: string
   data_checkout: string
-  status: 'pendente' | 'confirmada' | 'cancelada'
-  data_solicitacao?: string
+  numero_pessoas: number
+  observacoes?: string
+  created_at: string
+}
+
+export interface Document {
+  id: string
+  user_id: string
+  reservation_id?: string
+  nome: string
+  tipo: 'upload' | 'download'
+  url: string
+  created_at: string
+}
+
+export interface Notification {
+  id: string
+  user_id: string
+  tipo: 'mensagem' | 'status' | 'documento'
+  lida: boolean
+  titulo: string
+  mensagem: string
+  created_at: string
 }

@@ -1,8 +1,7 @@
-
 import { Resend } from 'resend'
 import type { Lead, Reservation } from './types'
 
-export const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export const sendLeadNotification = async (lead: Lead) => {
   try {
@@ -72,4 +71,43 @@ export const sendReservationCancellation = async (reservation: Reservation) => {
     console.error('Erro ao enviar email:', error)
     return { success: false, error }
   }
+}
+
+export async function sendReservationEmail(to: string, name: string, status: string) {
+  await resend.emails.send({
+    from: 'AcomodaFácil <no-reply@acomodafacil.com>',
+    to,
+    subject: `Atualização da sua reserva - ${status}`,
+    html: `
+      <h1>Olá ${name},</h1>
+      <p>O status da sua reserva foi atualizado para: <strong>${status}</strong></p>
+      <p>Acesse sua área do cliente para mais detalhes.</p>
+    `
+  })
+}
+
+export async function sendDocumentEmail(to: string, name: string, documentName: string) {
+  await resend.emails.send({
+    from: 'AcomodaFácil <no-reply@acomodafacil.com>',
+    to,
+    subject: 'Novo documento disponível',
+    html: `
+      <h1>Olá ${name},</h1>
+      <p>Um novo documento foi adicionado: <strong>${documentName}</strong></p>
+      <p>Acesse sua área do cliente para visualizar.</p>
+    `
+  })
+}
+
+export async function sendWelcomeEmail(to: string, name: string) {
+  await resend.emails.send({
+    from: 'AcomodaFácil <no-reply@acomodafacil.com>',
+    to,
+    subject: 'Bem-vindo à AcomodaFácil',
+    html: `
+      <h1>Olá ${name},</h1>
+      <p>Seja bem-vindo à AcomodaFácil!</p>
+      <p>Estamos felizes em ter você como cliente. Acesse sua área restrita para gerenciar suas reservas e documentos.</p>
+    `
+  })
 }
