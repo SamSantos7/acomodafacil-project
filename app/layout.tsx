@@ -30,7 +30,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body suppressHydrationWarning className={poppins.variable}>
-        <LayoutWrapper>{children}</LayoutWrapper>
+        <LayoutWrapper>
+          <React.Suspense fallback={<div>Loading...</div>}>
+            {children}
+          </React.Suspense>
+        </LayoutWrapper>
       </body>
     </html>
   )

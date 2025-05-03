@@ -3,10 +3,17 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ['localhost', '0.0.0.0'],
-    formats: ['image/webp', 'image/avif'],
-    deviceSizes: [320, 640, 750, 828, 1080, 1200, 1920, 2048],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 86400,
+    formats: ['image/webp'],
+    deviceSizes: [640, 828, 1200, 1920],
+    imageSizes: [16, 32, 64, 96, 128, 256],
+    minimumCacheTTL: 60,
+  },
+  experimental: {
+    optimizeServerReact: true,
+  },
+  onDemandEntries: {
+    maxInactiveAge: 60 * 60 * 1000,
+    pagesBufferLength: 5,
   },
   experimental: {
     optimizePackageImports: ['@radix-ui', '@hookform', 'lucide-react']
