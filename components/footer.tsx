@@ -127,15 +127,11 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <Mail className="h-5 w-5 text-gold-300 mt-0.5" />
-                <span className="text-gray-300">contato@acomodafacil.com</span>
+                <span className="text-gray-300">booking@acomodafacil.com.br</span>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="h-5 w-5 text-gold-300 mt-0.5" />
-                <span className="text-gray-300">+353 (0) 1 234 5678</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-gold-300 mt-0.5" />
-                <span className="text-gray-300">O'Connell Street, Dublin 1, Irlanda</span>
+                <span className="text-gray-300">+55 21 97025-6372</span>
               </li>
             </ul>
           </div>

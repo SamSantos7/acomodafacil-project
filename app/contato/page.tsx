@@ -131,7 +131,7 @@ export default function Contato() {
                         <Send className="mr-2 h-5 w-5" /> Enviar Mensagem
                       </Button>
                       <p className="text-xs text-graphite-300 mt-3 text-center">
-                        Ao enviar, você concorda com nossa Política de Privacidade e Termos de Uso
+                        Ao enviar, você concorda com nossa <Link href="/politica-de-privacidade" className="text-teal-500 hover:underline">Política de Privacidade</Link> e <Link href="/termos-de-uso" className="text-teal-500 hover:underline">Termos de Uso</Link>
                       </p>
                     </div>
                   </form>
@@ -151,7 +151,7 @@ export default function Contato() {
                         <Mail className="h-5 w-5 text-teal-500 flex-shrink-0 mt-0.5" />
                         <div>
                           <h3 className="font-medium text-graphite-400">E-mail</h3>
-                          <p className="text-graphite-300">booking@acomodafacil.br</p>
+                          <p className="text-graphite-300">booking@acomodafacil.com.br</p>
                         </div>
                       </div>
 
@@ -159,7 +159,7 @@ export default function Contato() {
                         <Phone className="h-5 w-5 text-teal-500 flex-shrink-0 mt-0.5" />
                         <div>
                           <h3 className="font-medium text-graphite-400">WhatsApp</h3>
-                          <p className="text-graphite-300">+55 (21) 97028-6372</p>
+                          <p className="text-graphite-300">+55 21 97025-6372</p>
                         </div>
                       </div>
 
@@ -187,7 +187,7 @@ export default function Contato() {
                       </p>
                       <Button asChild className="w-full bg-teal-500 hover:bg-teal-600 text-white">
                         <Link
-                          href="https://wa.me/5521970286372"
+                          href="https://wa.me/5521970256372"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center justify-center gap-2"
