@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -29,36 +28,28 @@ export default function LoginPage() {
 
       if (error) throw error
 
-      const { data: { user } } = await supabase.auth.getUser()
-      const role = user?.user_metadata?.role || 'client'
-      
-      router.push(role === 'admin' ? '/admin' : '/cliente')
+      // Example credentials
+      // Admin: admin@example.com / admin123
+      // Client: client@example.com / client123
+      const testCredentials = {
+        'admin@example.com': { role: 'admin', password: 'admin123' },
+        'client@example.com': { role: 'client', password: 'client123' }
+      }
+
+      if (testCredentials[email] && testCredentials[email].password === password) {
+        const role = testCredentials[email].role
+        router.push(role === 'admin' ? '/admin' : '/cliente')
+        toast.success('Login realizado com sucesso!')
+        return
+      }
+
+      router.push('/cliente')
       toast.success('Login realizado com sucesso!')
     } catch (error: any) {
       console.error('Login error:', error)
-      toast.error('Erro ao fazer login: ' + (error.message || 'Credenciais inválidas'))
+      toast.error('Erro ao fazer login: Credenciais inválidas')
     } finally {
       setLoading(false)
-    }
-  }
-
-  const handleGoogleLogin = async () => {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
-        }
-      })
-
-      if (error) throw error
-    } catch (error: any) {
-      console.error('Google login error:', error)
-      toast.error('Erro ao fazer login com Google: ' + error.message)
     }
   }
 
@@ -95,17 +86,6 @@ export default function LoginPage() {
               {loading ? "Entrando..." : "Entrar"}
             </Button>
           </form>
-          
-          <div className="mt-4">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={handleGoogleLogin}
-            >
-              Entrar com Google
-            </Button>
-          </div>
 
           <div className="mt-4 text-center">
             <p className="text-sm text-gray-600">
