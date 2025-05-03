@@ -1,4 +1,5 @@
-import React, { Suspense } from "react"
+
+import React from "react"
 import type { Metadata } from "next"
 import { Poppins } from "next/font/google"
 import "./globals.css"
@@ -10,7 +11,6 @@ const poppins = Poppins({
   variable: "--font-poppins",
   display: 'swap',
   preload: true,
-  adjustFontFallback: true,
 })
 
 export const metadata: Metadata = {
@@ -30,11 +30,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body suppressHydrationWarning className={poppins.variable}>
-        <LayoutWrapper>
-          <Suspense fallback={<div>Loading...</div>}>
-            {children}
-          </Suspense>
-        </LayoutWrapper>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   )
