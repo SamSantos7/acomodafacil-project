@@ -28,12 +28,15 @@ export default function LoginPage() {
       })
 
       if (error) throw error
+
+      const { data: { user } } = await supabase.auth.getUser()
+      const role = user?.user_metadata?.role || 'client'
       
-      const role = data.user?.user_metadata?.role || 'client'
       router.push(role === 'admin' ? '/admin' : '/cliente')
       toast.success('Login realizado com sucesso!')
     } catch (error: any) {
-      toast.error('Erro ao fazer login: ' + error.message)
+      console.error('Login error:', error)
+      toast.error('Erro ao fazer login: ' + (error.message || 'Credenciais inválidas'))
     } finally {
       setLoading(false)
     }
@@ -41,14 +44,20 @@ export default function LoginPage() {
 
   const handleGoogleLogin = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         }
       })
+
       if (error) throw error
     } catch (error: any) {
+      console.error('Google login error:', error)
       toast.error('Erro ao fazer login com Google: ' + error.message)
     }
   }
