@@ -18,32 +18,27 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-
     try {
+      setLoading(true)
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      if (error) throw error
-
-      // Example credentials
-      // Admin: admin@example.com / admin123
-      // Client: client@example.com / client123
-      const testCredentials = {
-        'admin@example.com': { role: 'admin', password: 'admin123' },
-        'client@example.com': { role: 'client', password: 'client123' }
-      }
-
-      if (testCredentials[email] && testCredentials[email].password === password) {
-        const role = testCredentials[email].role
-        router.push(role === 'admin' ? '/admin' : '/cliente')
-        toast.success('Login realizado com sucesso!')
+      if (error) {
+        toast.error('Credenciais inválidas')
         return
       }
 
-      router.push('/cliente')
+      const { data: { user } } = await supabase.auth.getUser()
+      const role = user?.user_metadata?.role || 'client'
+
+      if (role === 'admin') {
+        router.push('/admin')
+      } else {
+        router.push('/cliente')
+      }
+
       toast.success('Login realizado com sucesso!')
     } catch (error: any) {
       console.error('Login error:', error)
