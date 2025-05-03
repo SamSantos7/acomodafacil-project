@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { supabase } from "@/lib/supabase"
+import { toast } from "sonner"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -28,24 +29,35 @@ export default function LoginPage() {
 
       if (error) throw error
       
-      // Redirecionar baseado no tipo de usuário
-      if (data.user?.user_metadata?.role === "admin") {
-        router.push("/admin/dashboard")
-      } else {
-        router.push("/cliente/dashboard")
-      }
-    } catch (error) {
-      alert("Erro ao fazer login. Verifique suas credenciais.")
+      const role = data.user?.user_metadata?.role || 'client'
+      router.push(role === 'admin' ? '/admin' : '/cliente')
+      toast.success('Login realizado com sucesso!')
+    } catch (error: any) {
+      toast.error('Erro ao fazer login: ' + error.message)
     } finally {
       setLoading(false)
     }
   }
 
+  const handleGoogleLogin = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      })
+      if (error) throw error
+    } catch (error: any) {
+      toast.error('Erro ao fazer login com Google: ' + error.message)
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md mx-auto md:max-w-lg lg:max-w-xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl text-center font-bold">Login</CardTitle>
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">Login</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -74,6 +86,18 @@ export default function LoginPage() {
               {loading ? "Entrando..." : "Entrar"}
             </Button>
           </form>
+          
+          <div className="mt-4">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleGoogleLogin}
+            >
+              Entrar com Google
+            </Button>
+          </div>
+
           <div className="mt-4 text-center">
             <p className="text-sm text-gray-600">
               Ainda não tem uma conta?{" "}
