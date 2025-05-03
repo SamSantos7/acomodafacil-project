@@ -57,10 +57,16 @@ export const Navbar = () => {
             Acomodações
           </Link>
           <Link
-            href="/quem-somos"
+            href="/sobre-nos"
             className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
           >
-            Quem Somos
+            Sobre Nós
+          </Link>
+          <Link
+            href="/contato"
+            className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
+          >
+            Contato
           </Link>
         </nav>
 
@@ -128,11 +134,18 @@ export const Navbar = () => {
               Acomodações
             </Link>
             <Link
-              href="/quem-somos"
+              href="/sobre-nos"
               className="py-2 text-sm font-medium text-graphite-400"
               onClick={() => setIsMenuOpen(false)}
             >
-              Quem Somos
+              Sobre Nós
+            </Link>
+            <Link
+              href="/contato"
+              className="py-2 text-sm font-medium text-graphite-400"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Contato
             </Link>
             <div className="flex flex-col gap-2 pt-2">{/* Botões removidos */}</div>
           </div>
