@@ -8,9 +8,12 @@ export async function middleware(req: NextRequest) {
   const supabase = createMiddlewareClient({ req, res })
   const { data: { session } } = await supabase.auth.getSession()
   
-  // Permitir acesso mesmo sem verificação de email
-  if (session?.user?.email_confirmed_at === null) {
-    session.user.email_confirmed_at = new Date().toISOString()
+  // Verificação de sessão
+  if (!session?.user) {
+    if (isAdminPage || isClientPage) {
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+    return res
   }
 
   const isAuthPage = req.nextUrl.pathname.startsWith('/login') || 
