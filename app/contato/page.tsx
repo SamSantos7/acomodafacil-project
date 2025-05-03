@@ -151,24 +151,15 @@ export default function Contato() {
                         <Mail className="h-5 w-5 text-teal-500 flex-shrink-0 mt-0.5" />
                         <div>
                           <h3 className="font-medium text-graphite-400">E-mail</h3>
-                          <p className="text-graphite-300">contato@acomodafacil.com</p>
+                          <p className="text-graphite-300">booking@acomodafacil.br</p>
                         </div>
                       </div>
 
                       <div className="flex items-start gap-3">
                         <Phone className="h-5 w-5 text-teal-500 flex-shrink-0 mt-0.5" />
                         <div>
-                          <h3 className="font-medium text-graphite-400">Telefone</h3>
-                          <p className="text-graphite-300">+353 (0) 1 234 5678</p>
-                          <p className="text-graphite-300">WhatsApp: +55 (11) 98765-4321</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <MapPin className="h-5 w-5 text-teal-500 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <h3 className="font-medium text-graphite-400">Endereço</h3>
-                          <p className="text-graphite-300">O'Connell Street, Dublin 1, Irlanda</p>
+                          <h3 className="font-medium text-graphite-400">WhatsApp</h3>
+                          <p className="text-graphite-300">+55 (21) 97028-6372</p>
                         </div>
                       </div>
 
@@ -176,8 +167,8 @@ export default function Contato() {
                         <Clock className="h-5 w-5 text-teal-500 flex-shrink-0 mt-0.5" />
                         <div>
                           <h3 className="font-medium text-graphite-400">Horário de Atendimento</h3>
-                          <p className="text-graphite-300">Segunda a Sexta: 9h às 18h (horário de Dublin)</p>
-                          <p className="text-graphite-300">Sábado: 10h às 14h (horário de Dublin)</p>
+                          <p className="text-graphite-300">Segunda a Sexta: 9h às 18h (horário de Brasilia)</p>
+                          <p className="text-graphite-300">Sábado: 10h às 14h (horário de Brasilia)</p>
                         </div>
                       </div>
                     </div>
@@ -213,28 +204,6 @@ export default function Contato() {
         </div>
       </section>
 
-      {/* Map Section */}
-      <section className="bg-sand-50 py-16 md:py-20">
-        <div className="container px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-graphite-400 mb-4">Nossa Localização</h2>
-            <p className="max-w-[700px] mx-auto text-graphite-300">
-              Nosso escritório está localizado no centro de Dublin, com fácil acesso por transporte público
-            </p>
-          </div>
-
-          <div className="relative h-[400px] md:h-[500px] rounded-lg overflow-hidden shadow-xl">
-            <Image src="/images/dublin-map.png" alt="Mapa de Localização" fill className="object-cover" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-white p-4 rounded-lg shadow-lg">
-                <h3 className="font-bold text-graphite-400">AcomodaFácil</h3>
-                <p className="text-graphite-300">O'Connell Street, Dublin 1, Irlanda</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* FAQ Section */}
       <section className="bg-white py-20 md:py-28">
         <div className="container px-4">
@@ -258,9 +227,9 @@ export default function Contato() {
                   "Nosso foco principal são estudantes brasileiros, mas também atendemos estudantes de outros países de língua portuguesa.",
               },
               {
-                question: "Como funciona o processo de cotação?",
+                question: "Qual é o período mínimo de estadia?",
                 answer:
-                  "Após preencher o formulário de cotação, nossa equipe analisa seu perfil e envia opções personalizadas em até 48 horas.",
+                  "O período mínimo de estadia varia de acordo com o tipo de acomodação, mas geralmente é de 4 semanas para estadias curtas e 16 semanas para contratos mais longos.",
               },
               {
                 question: "Vocês cobram alguma taxa pelo serviço?",
