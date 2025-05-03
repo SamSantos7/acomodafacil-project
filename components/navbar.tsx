@@ -36,51 +36,20 @@ export const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        <div className="flex-1"></div>
+        <nav className="hidden md:flex items-center gap-8 justify-end">
           <Link
             href="/"
             className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
           >
             Home
           </Link>
-          <div className="relative">
-            <button
-              onClick={() => setIsDestinationsOpen(!isDestinationsOpen)}
-              className="flex items-center gap-1 text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors"
-            >
-              Destinos <ChevronDown className="h-4 w-4 transition-transform duration-200" />
-            </button>
-            {isDestinationsOpen && (
-              <div className="absolute top-full left-0 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 animate-fadeIn">
-                <div className="py-1">
-                  <Link
-                    href="/destinos/dublin"
-                    className="block px-4 py-2 text-sm text-graphite-400 hover:bg-sand-100 hover:text-teal-500 transition-colors"
-                  >
-                    Dublin
-                  </Link>
-                  <Link
-                    href="/destinos/cork"
-                    className="block px-4 py-2 text-sm text-graphite-400 hover:bg-sand-100 hover:text-teal-500 transition-colors"
-                  >
-                    Cork
-                  </Link>
-                  <Link
-                    href="/destinos/limerick"
-                    className="block px-4 py-2 text-sm text-graphite-400 hover:bg-sand-100 hover:text-teal-500 transition-colors"
-                  >
-                    Limerick
-                  </Link>
-                  <Link
-                    href="/destinos"
-                    className="block px-4 py-2 text-sm font-medium text-teal-500 hover:bg-sand-100 transition-colors"
-                  >
-                    Ver todos
-                  </Link>
-                </div>
-              </div>
-            )}
-          </div>
+          <Link
+            href="/destinos"
+            className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
+          >
+            Destinos
+          </Link>
           <Link
             href="/acomodacoes"
             className="text-sm font-medium text-graphite-400 hover:text-teal-500 transition-colors hover-underline"
