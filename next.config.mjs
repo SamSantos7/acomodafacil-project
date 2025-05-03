@@ -3,10 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ['localhost', '0.0.0.0'],
-    unoptimized: true,
-    formats: ['image/webp'],
-    deviceSizes: [640, 828, 1200, 1920],
-    imageSizes: [16, 32, 64, 96, 128, 256],
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [320, 640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 86400,
   },
   experimental: {
@@ -17,6 +16,12 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  poweredByHeader: false,
+  compress: true,
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
   },
   webpack: (config) => {
     config.watchOptions = {
